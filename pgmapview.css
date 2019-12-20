@@ -8,7 +8,7 @@ body {
 }
 .sidebar {
     position:absolute; top:50px; bottom:0px; left: 0px; width:200px;
-    background-color: rgb(211, 222, 247);
+    background-color: #dee6f8;
     padding: 10px;
 }
 
@@ -40,16 +40,24 @@ a:hover, a:focus { text-decoration: underline; }
 }
 
 .identify-panel {
-    display: none;
+    xdisplay: none;
     position: absolute; bottom: 30px; left: 240px; right: 20px;
     height: 160px;
-    background-color: white;
+    background-color: #dee6f8;
+    border: 1px solid blue;
+    font-size: 10pt;
+}
+.identify-panel-title {
+    width: 100%;
+    text-align: center;
 }
 .identify-closer {
-    width: 100%;
+    position: absolute;
+    top: 0px;
+    right: 4px;
+    width: 20px;
     text-align: right;
     color: red;
-    background-color: lightgrey;
     cursor: pointer;
 }
 .identify-content-panel {
@@ -57,6 +65,7 @@ a:hover, a:focus { text-decoration: underline; }
     width: 100%;
     bottom: 0px;
     top: 20px;
+    background-color: white;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -64,6 +73,7 @@ a:hover, a:focus { text-decoration: underline; }
     font-style: italic;
     background-color: #dddddd;
     padding: 2px;
+    padding-right: 6px;
     text-align: right;
 }
 
