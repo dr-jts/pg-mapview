@@ -35,6 +35,15 @@ a:hover, a:focus { text-decoration: underline; }
     border-radius: 4px;
     display: none;
 }
+.panel-group-title {
+    color: blue;
+    font-size: 12px;
+    font-style: italic;
+}
+.panel-line-title {
+    text-align: right;
+    padding-right: 10px;
+}
 #map {
     position:absolute; top:50px; bottom:0px; left: 220px; right:0px;
 }
