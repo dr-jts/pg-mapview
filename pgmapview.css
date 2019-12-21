@@ -40,7 +40,7 @@ a:hover, a:focus { text-decoration: underline; }
 }
 
 .identify-panel {
-    xdisplay: none;
+    display: none;
     position: absolute; bottom: 30px; left: 240px; right: 20px;
     height: 160px;
     background-color: #dee6f8;

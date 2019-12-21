@@ -36,11 +36,11 @@ PGMap.prototype.addLayer = function(title, url) {
 		color: clrDefault,
 		olLayer: olLayer
 	}
-	this._loadLayer(lyr);
+	this._loadLayer(lyr, true);
 	return lyr;
 }
 
-PGMap.prototype._loadLayer = function(lyr) {
+PGMap.prototype._loadLayer = function(lyr, doZoom) {
 	let self = this;
 
 	let src = lyr.olLayer.getSource();
@@ -60,7 +60,9 @@ PGMap.prototype._loadLayer = function(lyr) {
 			featureProjection: 'EPSG:3857'
 		  } );
 		  src.addFeatures(features);
-		  self.layerZoom(lyr);
+		  if (doZoom) {
+			  self.layerZoom(lyr);
+		  }
 		})
 		.fail(function(data) {
 		  console.log("geojson error in "+ lyr.url);
