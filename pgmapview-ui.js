@@ -24,7 +24,7 @@ function loadSelectCollections(collections) {
             value: collections[i].id
         });
     }
-    addOptions('#collection-names', [{text: 'Set layer...', value: ''}], true)
+    addOptions('#collection-names', [{text: 'Set collection...', value: ''}], true)
     addOptions('#collection-names', options, false)
 }
 
