@@ -6,6 +6,36 @@ document.getElementById('btn-layer-add-cancel').onclick = function() {
     panelShow('panel-layer-add', false);
 }
 
+document.getElementById('btn-collection-read').onclick = function() {
+    var url = document.getElementById('layer-host').value;
+    // display temporary loading msg
+    loadOptions('#collection-names', [
+        { text: 'Loading...', value: '' }
+    ])
+    var colls = map.readCollections(url, loadSelectCollections);
+}
+
+function loadSelectCollections(collections) {
+    //console.log(collections);
+    var options = [];
+    for (var i = 0; i < collections.length; i++) {
+        var id = collections[i].id;
+        options.push({
+            text: collections[i].id,
+            value: collections[i].id
+        });
+    }
+    loadOptions('#collection-names', options)
+}
+
+function loadOptions(selectId, options) {
+    var $sel = $(selectId).empty();
+    for (var i = 0; i < options.length; i++) {
+        $sel.append( $('<option>', options[i]));
+    }
+}
+
+
 var btnLayerAdd = document.getElementById('btn-layer-add');
 btnLayerAdd.onclick = function() {
     var url = document.getElementById('layer-url').value;
@@ -30,9 +60,12 @@ btnLayerAdd.onclick = function() {
     panelShow('panel-layer-add', false);
 }
 
-function onChangeTransform(id, targetID) {
-    var select = document.getElementById(id);
-    var fun = select.options[select.selectedIndex].value;
+function onChangeCollection(select, layerid) {
+    var lyrid = select.options[select.selectedIndex].value;
+    document.getElementById(layerid).value = lyrid;
+}
+function onChangeTransform(select, targetID) {
+   var fun = select.options[select.selectedIndex].value;
     // skip blank option
     if (fun.length <= 0) return;
     var trans = document.getElementById(targetID).value

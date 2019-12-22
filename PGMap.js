@@ -21,6 +21,15 @@ function PGMap(divid, options) {
 	//this._installOverlay();
 }
 
+PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
+	var url = urlService + "/collections";
+	$.getJSON( url, {})
+	.done (function(data) {
+		fnDone( data.collections );
+	})
+	.fail(fnFail);
+	return [];
+}
 PGMap.prototype.addLayer = function(title, url) {
 	var clrDefault = '#0000ff';
 	let src = new ol.source.Vector();
@@ -46,8 +55,7 @@ PGMap.prototype._loadLayer = function(lyr, doZoom) {
 	let src = lyr.olLayer.getSource();
 	src.clear();
 
-	// DEVELOPMENT ONLY
-	/*
+	/* ---------  // DEVELOPMENT ONLY
 	layerSetFeaturesMock(lyr);
 	this.layerZoom(lyr);
 	return;
