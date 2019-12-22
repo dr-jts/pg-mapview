@@ -9,9 +9,8 @@ document.getElementById('btn-layer-add-cancel').onclick = function() {
 document.getElementById('btn-collection-read').onclick = function() {
     var url = document.getElementById('layer-host').value;
     // display temporary loading msg
-    loadOptions('#collection-names', [
-        { text: 'Loading...', value: '' }
-    ])
+    addOptions('#collection-names',
+        [{ text: 'Loading...', value: '' }], true)
     var colls = map.readCollections(url, loadSelectCollections);
 }
 
@@ -25,16 +24,17 @@ function loadSelectCollections(collections) {
             value: collections[i].id
         });
     }
-    loadOptions('#collection-names', options)
+    addOptions('#collection-names', [{text: 'Set layer...', value: ''}], true)
+    addOptions('#collection-names', options, false)
 }
 
-function loadOptions(selectId, options) {
-    var $sel = $(selectId).empty();
+function addOptions(selectId, options, clear) {
+    var $sel = $(selectId);
+    if (clear) $sel.empty();
     for (var i = 0; i < options.length; i++) {
         $sel.append( $('<option>', options[i]));
     }
 }
-
 
 var btnLayerAdd = document.getElementById('btn-layer-add');
 btnLayerAdd.onclick = function() {

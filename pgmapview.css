@@ -29,8 +29,8 @@ a:hover, a:focus { text-decoration: underline; }
 
 .panel {
     position:absolute; top:100px; bottom:100px; left: 240px; right:60px;
-    background-color: rgb(211, 222, 247);
-    padding: 20px;
+    background-color: #dee6f8;
+    padding: 10px;
     border: 1px solid blue;
     border-radius: 4px;
     display: none;
