@@ -122,6 +122,9 @@ function uiAddLayer(lyr) {
     var $toolZoom = $('<span>').addClass('layer-zoom layer-tool').appendTo($tools)
         .text('Z')
         .attr('title', 'Remove Layer');
+    var $toolInfo = $('<span>').addClass('layer-info layer-tool').appendTo($tools)
+        .text('i')
+        .attr('title', 'Layer info');
 
     $chkVis.click(function () {
         var isVisible = $(this).is(':checked');
@@ -147,16 +150,28 @@ function uiAddLayer(lyr) {
     $toolZoom.click(function() {
         map.layerZoom(lyr);
     })
+    $toolInfo.click(function() {
+        uiInfo(lyr);
+    })
     $toolColor.change(function() {
         map.layerColor( lyr, $toolColor.val() );
     });
 }
-$('.identify-closer').click(function() {
-    $('.identify-panel').hide();
+$('.panel-closer').click(function() {
+    panelsHide();
 });
+function panelsHide() {
+    $('.identify-panel').hide();
+    $('.info-panel').hide();
+    $('.layer-panel').hide();
+}
+function uiInfo(layer) {
+    panelsHide();
+    $('.info-panel').show();
+}
 function uiIdentifyFeature( feature ) {
+    panelsHide();
     if (! feature ) {
-        $('.identify-panel').hide();
         return;
     }
     $('.identify-panel').show();
