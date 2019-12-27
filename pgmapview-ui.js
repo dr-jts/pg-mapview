@@ -172,9 +172,10 @@ function uiInfo(layer) {
     updateInfo(layer);
 }
 function updateInfo(layer) {
-    $('#info-name').text(layer.title)
-    $('#info-count-features').text(layer.numFeatures);
-    $('#info-loadtime').text(layer.loadTime/ 1000);
+    $('#info-name').text( layer.title )
+    $('#info-count-features').text( layer.numFeatures );
+    $('#info-loadtime').text( layer.loadTime/ 1000 );
+    $('#info-url').text( layer.url );
 }
 function uiIdentifyFeature( feature ) {
     panelsHide();
