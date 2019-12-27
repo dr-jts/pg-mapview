@@ -78,7 +78,7 @@ function uiAddLayer(lyr) {
     var self = this;
 
     var $div = $('<div class="layer-list-item">');
-    $div.appendTo( $('#layer-list') );
+    $div.prependTo( $('#layer-list') );
     var $chkVis = $('<input type="checkbox" class="checkbox-single"/>')
                 .prop('checked', true)
                 .appendTo( $div );
