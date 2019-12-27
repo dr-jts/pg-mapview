@@ -146,6 +146,7 @@ function uiAddLayer(lyr) {
     })
     $toolReload.click(function() {
         map.layerReload(lyr);
+        updateInfo(lyr);
     })
     $toolZoom.click(function() {
         map.layerZoom(lyr);
