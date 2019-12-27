@@ -101,7 +101,8 @@ function uiAddLayer(lyr) {
     var $tools = $('<div class="layer-tools">').appendTo($div);
 	var $toolRemove = $('<span>').addClass('layer-remove layer-tool').appendTo($tools)
 		.text('x')
-		.attr('title', 'Remove Layer');
+        .attr('title', 'Remove Layer');
+        /*
     var $toolUp = $('<span>').addClass('layer-up layer-tool').appendTo( $tools )
 		.text('^')
 		.attr('title', 'Move Layer up');
@@ -116,6 +117,7 @@ function uiAddLayer(lyr) {
 			$nxt.after($div);
 			//$tools.hide();
         });
+        */
     var $toolReload = $('<span>').addClass('layer-reload layer-tool').appendTo( $tools )
 		.text('R')
 		.attr('title', 'Reload Layer');
@@ -132,6 +134,7 @@ function uiAddLayer(lyr) {
         map.layerSetVisible(lyr, isVisible);
         //self.clearTime();
     } )
+    /*
     $toolUp.click(function() {
         self.removeLayer(lyr, -1);
         var $prev = $div.prev();
@@ -140,6 +143,7 @@ function uiAddLayer(lyr) {
         $prev.before($div);
         //$tools.hide();
     });
+    */
     $toolRemove.click(function() {
         map.removeLayer(lyr);
         $div.remove();
