@@ -43,7 +43,10 @@ PGMap.prototype.addLayer = function(title, url) {
 		title: title,
 		url: url,
 		color: clrDefault,
-		olLayer: olLayer
+		olLayer: olLayer,
+		numFeatures: 0,
+		loadTime: 0,
+		textStatus:''
 	}
 	this._loadLayer(lyr, true);
 	return lyr;
@@ -63,20 +66,24 @@ PGMap.prototype._loadLayer = function(lyr, doZoom) {
 	var timeStart = Date.now();
 	$.when(
 		$.getJSON( lyr.url, {})
-		.done (function(data) {
+		.done (function(data, textStatus, jqXHR) {
+			lyr.statusMsg = textStatus;
+			lyr.statusCode = jqXHR.status;
 			var timeEnd = Date.now();
 			lyr.loadTime = timeEnd - timeStart;
-		  var features = (new ol.format.GeoJSON()).readFeatures(data, {
-			featureProjection: 'EPSG:3857'
-		  } );
-		  lyr.numFeatures = features.length;
-		  src.addFeatures(features);
-		  if (doZoom) {
-			  self.layerZoom(lyr);
-		  }
+			var features = (new ol.format.GeoJSON()).readFeatures(data, {
+				featureProjection: 'EPSG:3857'
+			} );
+			lyr.numFeatures = features.length;
+			src.addFeatures(features);
+			if (doZoom) {
+				self.layerZoom(lyr);
+			}
 		})
-		.fail(function(data) {
-		  console.log("geojson error in "+ lyr.url);
+		.fail(function(jqXHR, textStatus) {
+			lyr.statusMsg = textStatus;
+			lyr.statusCode = jqXHR.status;
+		  	console.log("geojson error in "+ lyr.url);
 		})
 	  ).then(function() {
 		  //console.log("geojson file loaded: "+ lyr.url);

@@ -173,6 +173,7 @@ function uiInfo(layer) {
 }
 function updateInfo(layer) {
     $('#info-name').text( layer.title )
+    $('#info-status').text( layer.statusCode + " - " + layer.statusMsg);
     $('#info-count-features').text( layer.numFeatures );
     $('#info-loadtime').text( layer.loadTime/ 1000 );
     $('#info-url').text( layer.url );
