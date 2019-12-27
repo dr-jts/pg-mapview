@@ -31,18 +31,22 @@
 </div>
 <div id='ol-mousepos' class='ol-mousepos'>&nbsp;</div>
 
-<div id='dentify-panel' class="identify-panel panel">
+<div id='identify-panel' class="identify-panel panel">
     <div class='panel-title'>Identify</div>
     <div class="panel-closer">x</div>
     <div class='identify-content-panel'>
         <table id="identify-content"></table>
     </div>
 </div>
-<div id='cinfo-panel' class='info-panel panel'>
-        <div class='panel-title'>Info</div>
+<div id='info-panel' class='info-panel panel'>
+        <div class='panel-title'>Layer Info</div>
         <div class="panel-closer">x</div>
-        <div class='identify-content-panel'>
-            <table id="identify-content"></table>
+        <div class='panel-content'>
+            <table>
+                <tr><td class='identify-name'>Name</td><td id='info-name'></td></tr>
+                <tr><td class='identify-name'>Features</td><td id='info-count-features'></td></tr>
+                <tr><td class='identify-name'>Load Time (s)</td><td id='info-loadtime'></td></tr>
+            </table>
         </div>
 </div>
 <div class='layer-panel panel' id='panel-layer-add'>

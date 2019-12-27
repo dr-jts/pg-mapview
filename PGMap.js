@@ -60,13 +60,16 @@ PGMap.prototype._loadLayer = function(lyr, doZoom) {
 	this.layerZoom(lyr);
 	return;
 */
-
+	var timeStart = Date.now();
 	$.when(
 		$.getJSON( lyr.url, {})
 		.done (function(data) {
+			var timeEnd = Date.now();
+			lyr.loadTime = timeEnd - timeStart;
 		  var features = (new ol.format.GeoJSON()).readFeatures(data, {
 			featureProjection: 'EPSG:3857'
 		  } );
+		  lyr.numFeatures = features.length;
 		  src.addFeatures(features);
 		  if (doZoom) {
 			  self.layerZoom(lyr);

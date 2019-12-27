@@ -168,6 +168,12 @@ function panelsHide() {
 function uiInfo(layer) {
     panelsHide();
     $('.info-panel').show();
+    updateInfo(layer);
+}
+function updateInfo(layer) {
+    $('#info-name').text(layer.title)
+    $('#info-count-features').text(layer.numFeatures);
+    $('#info-loadtime').text(layer.loadTime/ 1000);
 }
 function uiIdentifyFeature( feature ) {
     panelsHide();

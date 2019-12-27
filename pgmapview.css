@@ -54,7 +54,10 @@ a:hover, a:focus { text-decoration: underline; }
 }
 .panel-title {
     width: 100%;
+    height: 20px;
     text-align: center;
+    xfont-size: 8pt;
+    color:white; background-color: #0167B4;
 }
 .panel-closer {
     position: absolute;
@@ -62,8 +65,16 @@ a:hover, a:focus { text-decoration: underline; }
     right: 4px;
     width: 20px;
     text-align: right;
-    color: red;
+    color: white;
     cursor: pointer;
+}
+.panel-content {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    top: 20px;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 .identify-content-panel {
     position: absolute;
