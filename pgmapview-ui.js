@@ -53,13 +53,26 @@ btnLayerAdd.onclick = function() {
     if (title.length == 0) title = name;
     let lyr = addLayer(title, url);
     uiAddLayer(lyr);
+    layerLoad(lyr, true);
 
     //----- reset panel
     document.getElementById('layer-url').value = '';
     document.getElementById('layer-title').value = '';
     panelShow('panel-layer-add', false);
 }
-
+function layerLoad(lyr, doZoom) {
+    var prom = map.layerLoad(lyr, doZoom);
+    prom.done(function() {
+        uiLayerError(lyr, false);
+    });
+    prom.fail(function() {
+        uiLayerError(lyr, true);
+    });
+    prom.always(function() {
+        uiUpdateInfo(lyr);
+    })
+    return prom;
+}
 function onChangeCollection(select, layerid) {
     var lyrid = select.options[select.selectedIndex].value;
     document.getElementById(layerid).value = lyrid;
@@ -73,6 +86,7 @@ function onChangeTransform(select, targetID) {
     if (trans.length > 0) sep = '|';
     document.getElementById(targetID).value = trans + sep + fun;
 }
+var LAYER_NAME_PREF = 'lyr-name-' ;
 
 function uiAddLayer(lyr) {
     var self = this;
@@ -89,9 +103,10 @@ function uiAddLayer(lyr) {
         .appendTo($div)
         .attr('title', 'Set layer style')
         .val(lyr.color);
-    $('<label class="xx">').text(lyr.title)
+    $('<label class="layer-name">').text(lyr.title)
+        .attr('id', LAYER_NAME_PREF + lyr.id)
         .attr('title', lyr.url)
-        .appendTo($div)
+    .appendTo($div)
         .click( function() {
 			var show = ! $tools.is(':visible');
 			$('.layer-tools').hide();
@@ -149,8 +164,7 @@ function uiAddLayer(lyr) {
         $div.remove();
     })
     $toolReload.click(function() {
-        map.layerReload(lyr);
-        updateInfo(lyr);
+        layerLoad(lyr, false);
     })
     $toolZoom.click(function() {
         map.layerZoom(lyr);
@@ -170,12 +184,22 @@ function panelsHide() {
     $('.info-panel').hide();
     $('.layer-panel').hide();
 }
+function uiLayerError(layer, isError) {
+    $lyrName = $('#'+LAYER_NAME_PREF+layer.id)
+    if (isError) {
+        $lyrName.addClass('layer-name-error');
+    }
+    else {
+        $lyrName.removeClass('layer-name-error');
+    }
+
+}
 function uiInfo(layer) {
     panelsHide();
     $('.info-panel').show();
-    updateInfo(layer);
+    uiUpdateInfo(layer);
 }
-function updateInfo(layer) {
+function uiUpdateInfo(layer) {
     $('#info-name').text( layer.title )
     $('#info-status').text( layer.statusCode + " - " + layer.statusMsg);
     $('#info-count-features').text( layer.numFeatures );

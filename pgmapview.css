@@ -20,6 +20,13 @@ a:hover, a:focus { text-decoration: underline; }
 .layer-list-item {
     margin: 5px;
 }
+.layer-name {
+
+}
+.layer-name-error {
+    color: red;
+    font-style: italic;
+}
 .panel {
     padding: 10px;
     border: 1px solid blue;

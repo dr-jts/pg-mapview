@@ -1,14 +1,11 @@
 
-//var DATA_URL = 'http://localhost:9000/collections/nyc.streets/items.json?limit=100';
-
-
 map = new PGMap('map');
-//map.addLayer(DATA_URL);
+
 map.installMousePos('ol-mousepos')
 map.onFeatureClick(  uiIdentifyFeature );
 
 function addLayer(name, url) {
-    let lyr = map.addLayer(name, url);
+    let lyr = map.layerAdd(name, url);
     return lyr;
 }
 

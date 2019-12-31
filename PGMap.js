@@ -19,6 +19,7 @@ function PGMap(divid, options) {
         })
 	});
 	//this._installOverlay();
+	this.layerCounter = 0;
 }
 
 PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
@@ -30,7 +31,7 @@ PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-PGMap.prototype.addLayer = function(title, url) {
+PGMap.prototype.layerAdd = function(title, url) {
 	var clrDefault = '#0000ff';
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
@@ -38,8 +39,9 @@ PGMap.prototype.addLayer = function(title, url) {
         style: createStyleFunction(clrDefault)
     });
 	this.map.addLayer(olLayer);
-
+	this.layerCounter++;
 	let lyr = {
+		id: this.layerCounter,
 		title: title,
 		url: url,
 		color: clrDefault,
@@ -48,11 +50,11 @@ PGMap.prototype.addLayer = function(title, url) {
 		loadTime: 0,
 		textStatus:''
 	}
-	this._loadLayer(lyr, true);
+	//this._loadLayer(lyr, true);
 	return lyr;
 }
 
-PGMap.prototype._loadLayer = function(lyr, doZoom) {
+PGMap.prototype.layerLoad = function(lyr, doZoom) {
 	let self = this;
 
 	let src = lyr.olLayer.getSource();
@@ -64,7 +66,7 @@ PGMap.prototype._loadLayer = function(lyr, doZoom) {
 	return;
 */
 	var timeStart = Date.now();
-	$.when(
+	var prom = $.when(
 		$.getJSON( lyr.url, {})
 		.done (function(data, textStatus, jqXHR) {
 			lyr.statusMsg = textStatus;
@@ -85,9 +87,8 @@ PGMap.prototype._loadLayer = function(lyr, doZoom) {
 			lyr.statusCode = jqXHR.status;
 		  	console.log("geojson error in "+ lyr.url);
 		})
-	  ).then(function() {
-		  //console.log("geojson file loaded: "+ lyr.url);
-	  });
+	  );
+	  return prom;
 }
 
 PGMap.prototype.layerZoom = function(lyr) {
@@ -102,9 +103,6 @@ PGMap.prototype.removeLayer = function(lyr) {
 }
 PGMap.prototype.layerSetVisible = function(lyr, isVis) {
 	lyr.olLayer.setVisible(isVis);
-}
-PGMap.prototype.layerReload = function(lyr) {
-	this._loadLayer(lyr);
 }
 PGMap.prototype.layerColor = function(lyr, clr) {
 	lyr.olLayer.setStyle( createStyleFunction( clr ));
