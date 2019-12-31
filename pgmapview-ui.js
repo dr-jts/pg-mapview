@@ -179,11 +179,7 @@ function uiAddLayer(lyr) {
 $('.panel-closer').click(function() {
     panelsHide();
 });
-function panelsHide() {
-    $('.identify-panel').hide();
-    $('.info-panel').hide();
-    $('.layer-panel').hide();
-}
+
 function uiLayerError(layer, isError) {
     $lyrName = $('#'+LAYER_NAME_PREF+layer.id)
     if (isError) {
@@ -195,8 +191,7 @@ function uiLayerError(layer, isError) {
 
 }
 function uiInfo(layer) {
-    panelsHide();
-    $('.info-panel').show();
+    panelShow('info-panel', true);
     uiUpdateInfo(layer);
 }
 function uiUpdateInfo(layer) {
@@ -207,11 +202,11 @@ function uiUpdateInfo(layer) {
     $('#info-url').text( layer.url );
 }
 function uiIdentifyFeature( feature ) {
-    panelsHide();
     if (! feature ) {
+        panelsHide();
         return;
     }
-    $('.identify-panel').show();
+    panelShow('identify-panel', true);
     let prop = feature.getProperties();
 
     let $content = $('#identify-content');
@@ -229,6 +224,7 @@ function addIdentifyRow(div, name, value) {
 //----------------------------------
 var currentPanel = null;
 function panelShow(id, isVisible) {
+    panelsHide();
     var panel = document.getElementById(id);
     if( currentPanel != null) {
         currentPanel.style.display = 'none';
@@ -241,4 +237,9 @@ function panelShow(id, isVisible) {
     else {
         panel.style.display = 'none';
     }
+}
+function panelsHide() {
+    $('.identify-panel').hide();
+    $('.info-panel').hide();
+    $('.layer-panel').hide();
 }
