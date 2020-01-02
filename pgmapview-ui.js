@@ -107,9 +107,11 @@ function uiAddLayer(lyr) {
     var $chkVis = $('<input type="checkbox" class="checkbox-single"/>')
                 .prop('checked', true)
                 .appendTo( $div );
+    /*  -- hide until Identify Target is implemented
     var $radioIdent = $('<input type="radio" name="identify-radio" class="checkbox-single"/>')
         .prop('checked', true)
         .appendTo( $div );
+        */
     var $toolColor= $('<input type="color">').addClass('layer-color')
         .appendTo($div)
         .attr('title', 'Set layer style')
