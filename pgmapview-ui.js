@@ -7,12 +7,7 @@ document.getElementById('btn-layer-add-cancel').onclick = function() {
 }
 
 document.getElementById('btn-layer-bbox-use-map').onclick = function() {
-    var bbox = map.mapExtentGeo()
-    var minx = bbox[0].toFixed(4)
-    var miny = bbox[1].toFixed(4)
-    var maxx = bbox[2].toFixed(4)
-    var maxy = bbox[3].toFixed(4)
-    var bboxStr = minx + "," + miny + "," + maxx + "," + maxy
+    var bboxStr = map.mapExtentStr(4);
     document.getElementById('layer-bbox').value = bboxStr;
 }
 
@@ -50,23 +45,31 @@ var btnLayerAdd = document.getElementById('btn-layer-add');
 btnLayerAdd.onclick = function() {
     var url = document.getElementById('layer-url').value;
     var title = document.getElementById('layer-title').value;
+    var name = document.getElementById('layer-name').value;
+    if (title.length == 0) title = name;
+
+    var lyr;
     if (url.length > 0) {
        var name = collectionName(url);
+       lyr = addLayerDataset(title, url);
     }
     else {
         var host = document.getElementById('layer-host').value;
-        name = document.getElementById('layer-name').value;
         var limit = document.getElementById('layer-limit').value;
         var bbox = document.getElementById('layer-bbox').value;
         var trans = document.getElementById('layer-transform').value;
-        url = urlOafItems(host, name, limit, bbox, trans);
+        url = urlOafItems(host, name);
+        lyr = addLayer(title, url, {
+            limit: limit,
+            bbox: bbox,
+            tranform: trans
+        } );
     }
-    if (title.length == 0) title = name;
-    let lyr = addLayer(title, url);
+
     uiAddLayer(lyr);
     layerLoad(lyr, true);
 
-    //----- reset panel
+    //----- reset Layer panel
     document.getElementById('layer-url').value = '';
     document.getElementById('layer-title').value = '';
     panelShow('panel-layer-add', false);
@@ -148,7 +151,7 @@ function uiAddLayer(lyr) {
         */
     var $toolReload = $('<span>').addClass('layer-reload layer-tool').appendTo( $tools )
 		.text('R')
-		.attr('title', 'Reload Layer');
+		.attr('title', 'Reload Layer (Shift to use bbox)');
     var $toolZoom = $('<span>').addClass('layer-zoom layer-tool').appendTo($tools)
         .text('Z')
         .attr('title', 'Zoom to Layer');
@@ -176,7 +179,11 @@ function uiAddLayer(lyr) {
         map.removeLayer(lyr);
         $div.remove();
     })
-    $toolReload.click(function() {
+    $toolReload.click(function(evt) {
+        var updateBbox = evt.shiftKey;
+        if (updateBbox && lyr.options) {
+            lyr.options.bbox = map.mapExtentStr();
+        }
         layerLoad(lyr, false);
     })
     $toolZoom.click(function() {

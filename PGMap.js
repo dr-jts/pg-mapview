@@ -25,6 +25,17 @@ PGMap.prototype.mapExtentGeo = function() {
 	var extent = this.map.getView().calculateExtent(this.map.getSize());
 	return ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
 }
+PGMap.prototype.mapExtentStr = function(numDecimals) {
+	var fix = 4
+	if (numDecimals) fix = numDecimals;
+    var bbox = this.mapExtentGeo()
+    var minx = bbox[0].toFixed(4)
+    var miny = bbox[1].toFixed(4)
+    var maxx = bbox[2].toFixed(4)
+    var maxy = bbox[3].toFixed(4)
+	var bboxStr = minx + "," + miny + "," + maxx + "," + maxy;
+	return bboxStr;
+}
 PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	var url = urlService + "/collections";
 	$.getJSON( url, {})
@@ -34,7 +45,7 @@ PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-PGMap.prototype.layerAdd = function(title, url) {
+PGMap.prototype.layerAdd = function(title, url, options, genURLFn) {
 	var clrDefault = '#0000ff';
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
@@ -47,13 +58,14 @@ PGMap.prototype.layerAdd = function(title, url) {
 		id: this.layerCounter,
 		title: title,
 		url: url,
+		options: options,
+		genURLFn: genURLFn,
 		color: clrDefault,
 		olLayer: olLayer,
 		numFeatures: 0,
 		loadTime: 0,
-		textStatus:''
+		textStatus: ''
 	}
-	//this._loadLayer(lyr, true);
 	return lyr;
 }
 
@@ -63,6 +75,7 @@ PGMap.prototype.layerLoad = function(lyr, doZoom) {
 	let src = lyr.olLayer.getSource();
 	src.clear();
 
+	var urlReq = lyr.genURLFn(lyr.url, lyr.options);
 	/* ---------  // DEVELOPMENT ONLY
 	layerSetFeaturesMock(lyr);
 	this.layerZoom(lyr);
@@ -70,7 +83,7 @@ PGMap.prototype.layerLoad = function(lyr, doZoom) {
 */
 	var timeStart = Date.now();
 	var prom = $.when(
-		$.getJSON( lyr.url, {})
+		$.getJSON( urlReq, {})
 		.done (function(data, textStatus, jqXHR) {
 			lyr.statusMsg = textStatus;
 			lyr.statusCode = jqXHR.status;
