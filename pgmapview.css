@@ -112,26 +112,27 @@ a:hover, a:focus { text-decoration: underline; }
 }
 .layer-tools {
 	display: none;
-	background-color: #cccccc;
+	background-color: #bcc8f5;
 	padding: 4px;
 	margin: 1px 20px 4px 20px;
 	border-radius: 0 0 10px 10px;
 }
 .layer-tool {
 	padding-left: 2px;
-	padding-right: 2px;
+    padding-right: 2px;
+    margin: 0px 1px 0px 1px;
+    border: 1px solid #868686;
+    border-radius: 3px;
 	font-weight: bold;
 	cursor: pointer;
 }
 .layer-tool:hover {
-	background-color: #A9C1E5;
+	background-color: #dee6f8;
 }
 .layer-remove {
 	color: red;
 	display: inline-block;
-	width: 10px;
-	height: 10px;
-	margin-right: 6px;
+    margin-right: 10px;
 }
 .layer-color {
     border: 0px;

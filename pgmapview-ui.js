@@ -149,7 +149,7 @@ function uiAddLayer(lyr) {
 		.attr('title', 'Reload Layer');
     var $toolZoom = $('<span>').addClass('layer-zoom layer-tool').appendTo($tools)
         .text('Z')
-        .attr('title', 'Remove Layer');
+        .attr('title', 'Zoom to Layer');
     var $toolInfo = $('<span>').addClass('layer-info layer-tool').appendTo($tools)
         .text('i')
         .attr('title', 'Layer info');
