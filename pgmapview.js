@@ -9,10 +9,11 @@ function addLayer(name, url) {
     return lyr;
 }
 
-function urlOafItems(host, name, limit, trans)
+function urlOafItems(host, name, limit, bbox, trans)
 {
     var url = host + "/collections/" + name + "/items";
     url = addQueryParam(url, "limit", limit);
+    url = addQueryParam(url, "bbox", bbox);
     url = addQueryParam(url, "transform", trans);
     return url;
 }

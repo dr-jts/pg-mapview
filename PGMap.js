@@ -21,7 +21,10 @@ function PGMap(divid, options) {
 	//this._installOverlay();
 	this.layerCounter = 0;
 }
-
+PGMap.prototype.mapExtentGeo = function() {
+	var extent = this.map.getView().calculateExtent(this.map.getSize());
+	return ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+}
 PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	var url = urlService + "/collections";
 	$.getJSON( url, {})

@@ -6,6 +6,16 @@ document.getElementById('btn-layer-add-cancel').onclick = function() {
     panelShow('panel-layer-add', false);
 }
 
+document.getElementById('btn-layer-bbox-use-map').onclick = function() {
+    var bbox = map.mapExtentGeo()
+    var minx = bbox[0].toFixed(4)
+    var miny = bbox[1].toFixed(4)
+    var maxx = bbox[2].toFixed(4)
+    var maxy = bbox[3].toFixed(4)
+    var bboxStr = minx + "," + miny + "," + maxx + "," + maxy
+    document.getElementById('layer-bbox').value = bboxStr;
+}
+
 document.getElementById('btn-collection-read').onclick = function() {
     var url = document.getElementById('layer-host').value;
     // display temporary loading msg
@@ -47,8 +57,9 @@ btnLayerAdd.onclick = function() {
         var host = document.getElementById('layer-host').value;
         name = document.getElementById('layer-name').value;
         var limit = document.getElementById('layer-limit').value;
+        var bbox = document.getElementById('layer-bbox').value;
         var trans = document.getElementById('layer-transform').value;
-        url = urlOafItems(host, name, limit, trans);
+        url = urlOafItems(host, name, limit, bbox, trans);
     }
     if (title.length == 0) title = name;
     let lyr = addLayer(title, url);
