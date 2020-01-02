@@ -62,7 +62,7 @@ btnLayerAdd.onclick = function() {
         lyr = addLayer(title, url, {
             limit: limit,
             bbox: bbox,
-            tranform: trans
+            transform: trans
         } );
     }
 
