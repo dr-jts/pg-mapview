@@ -60,7 +60,7 @@ btnLayerAdd.onclick = function() {
 
     var lyr;
     if (url.length > 0) {
-       var name = collectionName(url);
+       var title = collectionName(url);
        lyr = addLayerDataset(title, url);
     }
     else {
