@@ -11,6 +11,16 @@ document.getElementById('btn-layer-bbox-use-map').onclick = function() {
     document.getElementById('layer-bbox').value = bboxStr;
 }
 
+document.getElementById('radio-layer-type-resource').onclick = function() {
+    $('#layer-url-panel').show();
+    $('#layer-collection-panel').hide();
+}
+
+document.getElementById('radio-layer-type-collection').onclick = function() {
+    $('#layer-url-panel').hide();
+    $('#layer-collection-panel').show();
+}
+
 document.getElementById('btn-collection-read').onclick = function() {
     var url = document.getElementById('layer-host').value;
     // display temporary loading msg

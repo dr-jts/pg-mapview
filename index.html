@@ -52,7 +52,13 @@
     </div>
 </div>
 <div class='layer-panel panel' id='panel-layer-add'>
-    <h3>Add Layer</h3>
+    <div style='margin-bottom: 10px;'>Add Layer</div>
+    <div><span class='panel-line-title'>Title</span> <input type="text" id='layer-title' style='width:90%;'></div>
+    <div class='layer-panel-tabs'>
+        <input type='radio' name='radio-layer-type' id='radio-layer-type-collection' checked> Collection
+        <input type='radio' name='radio-layer-type' id='radio-layer-type-resource'> Dataset
+    </div>
+    <div id='layer-collection-panel'>
     <table style='width:100%'>
         <tr><td class='panel-group-title' cellspan='2'>Service</td></tr>
         <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layer-host' style='width:90%;' value='http://localhost:9000'></td></tr>
@@ -96,11 +102,13 @@
                     </optgroup>
                 </select>
             </td></tr>
-        <tr><td class='panel-group-title' cellspan='2'>Dataset</td></tr>
-        <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layer-url' style='width:90%;' value=''></td></tr>
-        <tr><td class='panel-group-title' cellspan='2'>Layer</td></tr>
-        <tr><td class='panel-line-title'>Title</td><td><input type="text" id='layer-title' style='width:90%;'></td></tr>
     </table>
+    </div>
+    <div id='layer-url-panel' style='display: none;'>
+        <table style='width:100%'>
+            <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layer-url' style='width:90%;' value=''></td></tr>
+        </table>
+    </div>
     <div><button id='btn-layer-add'>Add</button><button id='btn-layer-add-cancel'>Cancel</button></div>
 </div>
 <div id="popup-container" class="arrow_box" style='display:none;'></div>
