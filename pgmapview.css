@@ -5,15 +5,15 @@ body {
 a { color:blue; text-decoration: none;}
 a:hover, a:focus { text-decoration: underline; }
 
-.header-tbl { height: 50px; width: 100%; border-spacing: 0px;}
+.header-tbl { height: 40px; width: 100%; border-spacing: 0px;}
 .header { color:white; background-color: #0167B4;
-    font-family: sans-serif; font-size: 24px; vertical-align: middle;
+    font-family: sans-serif; font-size: 20px; vertical-align: middle;
 }
 #map {
-    position:absolute; top:50px; bottom:0px; left: 220px; right:0px;
+    position:absolute; top:40px; bottom:0px; left: 220px; right:0px;
 }
 .sidebar {
-    position:absolute; top:50px; bottom:0px; left: 0px; width:200px;
+    position:absolute; top:40px; bottom:0px; left: 0px; width:200px;
     background-color: #dee6f8;
     padding: 10px;
 }
