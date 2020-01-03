@@ -57,12 +57,14 @@ btnLayerAdd.onclick = function() {
         var host = document.getElementById('layer-host').value;
         var limit = document.getElementById('layer-limit').value;
         var bbox = document.getElementById('layer-bbox').value;
-        var trans = document.getElementById('layer-transform').value;
+        var precision = document.getElementById('layer-precision').value;
+        var transform = document.getElementById('layer-transform').value;
         url = urlOafItems(host, name);
         lyr = addLayer(title, url, {
             limit: limit,
             bbox: bbox,
-            transform: trans
+            precision: precision,
+            transform: transform
         } );
     }
 

@@ -9,7 +9,7 @@ function addLayer(name, url, options) {
     return lyr;
 }
 function makeOafUrl(urlBase, opt) {
-    url = urlOafAddParams(urlBase, opt.limit, opt.bbox, opt.transform);
+    url = urlOafAddParams(urlBase, opt);
     return url;
 }
 
@@ -25,11 +25,12 @@ function urlOafItems(host, name, limit, bbox, trans)
     var url = host + "/collections/" + name + "/items";
     return url;
 }
-function urlOafAddParams(url, limit, bbox, trans)
+function urlOafAddParams(url, param)
 {
-    url = addQueryParam(url, "limit", limit);
-    url = addQueryParam(url, "bbox", bbox);
-    url = addQueryParam(url, "transform", trans);
+    url = addQueryParam(url, "limit", param.limit);
+    url = addQueryParam(url, "bbox", param.bbox);
+    url = addQueryParam(url, "precision", param.precision);
+    url = addQueryParam(url, "transform", param.transform);
     return url;
 }
 function addQueryParam(url, name, value) {
