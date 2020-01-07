@@ -1,7 +1,6 @@
 document.getElementById('btn-layer-add-show').onclick = function() {
-    panelShow('panel-layer-add', true);
+    uiShowLayerAdd();
 }
-
 document.getElementById('btn-layer-add-cancel').onclick = function() {
     panelShow('panel-layer-add', false);
 }
@@ -20,6 +19,9 @@ document.getElementById('radio-layer-type-collection').onclick = function() {
     $('#layer-url-panel').hide();
     $('#layer-collection-panel').show();
 }
+document.getElementById('btn-transform-clear').onclick = function() {
+    document.getElementById('layer-transform').value = '';
+}
 
 document.getElementById('btn-collection-read').onclick = function() {
     var url = document.getElementById('layer-host').value;
@@ -27,6 +29,56 @@ document.getElementById('btn-collection-read').onclick = function() {
     addOptions('#collection-names',
         [{ text: 'Loading...', value: '' }], true)
     var colls = map.readCollections(url, loadSelectCollections);
+}
+
+function uiShowLayerAdd() {
+    $('#btn-layer-add').show();
+    $('#btn-layer-update').hide();
+
+    $('.layer-panel-tabs').show();
+    $('#layer-collection-panel').show();
+    $('#layer-url-panel').hide();
+    $('#radio-layer-type-collection').prop('checked', true);
+    $('#radio-layer-type-resource').prop('checked', false);
+
+    $('#tbl-collection-url').show();
+
+    //----- reset Layer panel
+    document.getElementById('layer-url').value = '';
+    document.getElementById('layer-title').value = '';
+    document.getElementById('layer-limit').value = '';
+    document.getElementById('layer-bbox').value = '';
+    document.getElementById('layer-precision').value = '';
+    document.getElementById('layer-transform').value = '';
+
+    document.getElementById('sel-transform-function').selectedIndex = 0;
+
+    panelShow('panel-layer-add', true);
+}
+var layerToUpdate = null;
+function uiShowLayerUpdate(layer) {
+    layerToUpdate = layer;
+    var isCollection = layer.parameters != undefined;
+
+    $('#btn-layer-add').hide();
+    $('#btn-layer-update').show();
+
+    $('.layer-panel-tabs').hide();
+    $('#layer-collection-panel').toggle(isCollection);
+    $('#layer-url-panel').toggle(! isCollection);
+
+    $('#tbl-collection-url').hide();
+
+    //--- populate panel from layer
+    document.getElementById('layer-title').value = layer.title;
+    //document.getElementById('layer-url').value = '';
+    //document.getElementById('layer-name').value = 'XXXX';
+    document.getElementById('layer-limit').value = layer.parameters.limit;
+    document.getElementById('layer-bbox').value = layer.parameters.bbox;
+    document.getElementById('layer-precision').value = layer.parameters.precision;
+    document.getElementById('layer-transform').value = layer.parameters.transform;
+
+    panelShow('panel-layer-add', true);
 }
 
 function loadSelectCollections(collections) {
@@ -53,6 +105,8 @@ function addOptions(selectId, options, clear) {
 
 var btnLayerAdd = document.getElementById('btn-layer-add');
 btnLayerAdd.onclick = function() {
+    panelShow('panel-layer-add', false);
+
     var url = document.getElementById('layer-url').value;
     var title = document.getElementById('layer-title').value;
     var name = document.getElementById('layer-name').value;
@@ -65,27 +119,42 @@ btnLayerAdd.onclick = function() {
     }
     else {
         var host = document.getElementById('layer-host').value;
-        var limit = document.getElementById('layer-limit').value;
-        var bbox = document.getElementById('layer-bbox').value;
-        var precision = document.getElementById('layer-precision').value;
-        var transform = document.getElementById('layer-transform').value;
         url = urlOafItems(host, name);
-        lyr = addLayer(title, url, {
-            limit: limit,
-            bbox: bbox,
-            precision: precision,
-            transform: transform
-        } );
+        var params = layerParamsRead();
+        lyr = addLayer(title, url, params);
     }
 
-    uiAddLayer(lyr);
+    uiLayerCreate(lyr);
     layerLoad(lyr, true);
-
-    //----- reset Layer panel
-    document.getElementById('layer-url').value = '';
-    document.getElementById('layer-title').value = '';
-    panelShow('panel-layer-add', false);
 }
+function layerParamsRead() {
+    var limit = document.getElementById('layer-limit').value;
+    var bbox = document.getElementById('layer-bbox').value;
+    var precision = document.getElementById('layer-precision').value;
+    var transform = document.getElementById('layer-transform').value;
+    var params = {
+        limit: limit,
+        bbox: bbox,
+        precision: precision,
+        transform: transform
+    };
+    return params;
+}
+
+var btnLayerUpdate = document.getElementById('btn-layer-update');
+btnLayerUpdate.onclick = function() {
+    panelShow('panel-layer-add', false);
+
+    var lyr = layerToUpdate
+    var title = document.getElementById('layer-title').value;
+    lyr.title = title;
+    uiLayerTitleUpdate( lyr, title );
+
+    var params = layerParamsRead();
+    lyr.parameters = params;
+    layerLoad(lyr, true);
+}
+
 function layerLoad(lyr, doZoom) {
     var prom = map.layerLoad(lyr, doZoom);
     prom.done(function() {
@@ -111,10 +180,13 @@ function onChangeTransform(select, targetID) {
     var sep = '';
     if (trans.length > 0) sep = '|';
     document.getElementById(targetID).value = trans + sep + fun;
+
+    // set select back to prompt
+    select.selectedIndex = 0;
 }
 var LAYER_NAME_PREF = 'lyr-name-' ;
 
-function uiAddLayer(lyr) {
+function uiLayerCreate(lyr) {
     var self = this;
 
     var $div = $('<div class="layer-list-item">');
@@ -161,15 +233,25 @@ function uiAddLayer(lyr) {
 			//$tools.hide();
         });
         */
-    var $toolReload = $('<span>').addClass('layer-reload layer-tool').appendTo( $tools )
+    var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
 		.text('R')
 		.attr('title', 'Reload Layer (Shift to use bbox)');
-    var $toolZoom = $('<span>').addClass('layer-zoom layer-tool').appendTo($tools)
+    var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
         .text('Z')
         .attr('title', 'Zoom to Layer');
-    var $toolInfo = $('<span>').addClass('layer-info layer-tool').appendTo($tools)
+    var $toolInfo = $('<span>').addClass('layer-tool').appendTo($tools)
         .text('i')
         .attr('title', 'Layer info');
+
+    //--- Add Settings button for collections only
+    if (lyr.parameters) {
+        var $toolSettings = $('<span>').addClass('layer-tool').appendTo($tools)
+            .text('S')
+            .attr('title', 'Layer settings');
+        $toolSettings.click(function() {
+            uiShowLayerUpdate(lyr);
+        });
+    }
 
     $chkVis.click(function () {
         var isVisible = $(this).is(':checked');
@@ -194,7 +276,7 @@ function uiAddLayer(lyr) {
     $toolReload.click(function(evt) {
         var updateBbox = evt.shiftKey;
         if (updateBbox && lyr.options) {
-            lyr.options.bbox = map.mapExtentStr();
+            lyr.parameters.bbox = map.mapExtentStr();
         }
         layerLoad(lyr, false);
     })
@@ -202,7 +284,7 @@ function uiAddLayer(lyr) {
         map.layerZoom(lyr);
     })
     $toolInfo.click(function() {
-        uiInfo(lyr);
+        uiLayerInfo(lyr);
     })
     $toolColor.change(function() {
         map.layerColor( lyr, $toolColor.val() );
@@ -220,9 +302,13 @@ function uiLayerError(layer, isError) {
     else {
         $lyrName.removeClass('layer-name-error');
     }
-
 }
-function uiInfo(layer) {
+function uiLayerTitleUpdate(layer) {
+    $lyrName = $('#'+LAYER_NAME_PREF+layer.id)
+    $lyrName.text(  layer.title );
+}
+
+function uiLayerInfo(layer) {
     panelShow('info-panel', true);
     uiUpdateInfo(layer);
 }

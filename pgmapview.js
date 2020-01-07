@@ -14,7 +14,7 @@ function makeOafUrl(urlBase, opt) {
 }
 
 function addLayerDataset(name, url) {
-    let lyr = map.layerAdd(name, url, {}, function(url) {
+    let lyr = map.layerAdd(name, url, null, function(url) {
         return url
     });
     return lyr;

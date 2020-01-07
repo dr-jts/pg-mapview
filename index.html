@@ -59,7 +59,7 @@
         <input type='radio' name='radio-layer-type' id='radio-layer-type-resource'> Dataset
     </div>
     <div id='layer-collection-panel'>
-    <table style='width:100%'>
+    <table id='tbl-collection-url' style='width:100%'>
         <tr><td class='panel-group-title' cellspan='2'>Service</td></tr>
         <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layer-host' style='width:90%;' value='http://localhost:9000'></td></tr>
         <tr><td class='panel-group-title' cellspan='2'>Collection</td></tr>
@@ -68,6 +68,8 @@
             <select id='collection-names' style='width:100%;' onchange="onChangeCollection(this, 'layer-name');" ></select>
             </td></tr>
         <tr><td class='panel-line-title'>Collection</td><td><input type="text" id='layer-name' style='width:90%;' value=''></td></tr>
+    </table>
+    <table id='tbl-parameters' style='width:100%'>
         <tr><td class='panel-group-title' cellspan='2'>Parameters</td></tr>
         <tr><td class='panel-line-title'>Limit</td><td><input type="text" id='layer-limit' style='width:60px;'></td></tr>
         <tr><td class='panel-line-title'>Precision</td><td><input type="text" id='layer-precision' style='width:60px;'></td></tr>
@@ -75,7 +77,7 @@
         <tr><td class='panel-line-title'></td><td><button id='btn-layer-bbox-use-map'>Set from Map</button></td></tr>
         <tr><td class='panel-line-title'>Transform</td><td><input type="text" id='layer-transform' style='width:90%;'></td></tr>
         <tr><td></td><td>
-            <select id='transform-function' onchange="onChangeTransform(this,'layer-transform');" >
+            <select id='sel-transform-function' onchange="onChangeTransform(this,'layer-transform');" >
                     <option value=''>Add transform...</option>
                     <optgroup label="Geometry">
                         <option>ST_Boundary</option>
@@ -101,6 +103,7 @@
                         <option>ST_LineSubstring,0.2,0.8</option>
                     </optgroup>
                 </select>
+                <button id='btn-transform-clear'>Reset</button>
             </td></tr>
     </table>
     </div>
@@ -109,7 +112,11 @@
             <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layer-url' style='width:90%;' value=''></td></tr>
         </table>
     </div>
-    <div><button id='btn-layer-add'>Add</button><button id='btn-layer-add-cancel'>Cancel</button></div>
+    <div>
+            <button id='btn-layer-add'>Add</button>
+            <button id='btn-layer-update'>Update</button>
+            <button id='btn-layer-add-cancel'>Cancel</button>
+    </div>
 </div>
 <div id="popup-container" class="arrow_box" style='display:none;'></div>
 

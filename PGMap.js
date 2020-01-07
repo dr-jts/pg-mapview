@@ -45,7 +45,7 @@ PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-PGMap.prototype.layerAdd = function(title, url, options, genURLFn) {
+PGMap.prototype.layerAdd = function(title, url, params, genURLFn) {
 	var clrDefault = chooseColor(this.layerCounter);
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
@@ -58,7 +58,7 @@ PGMap.prototype.layerAdd = function(title, url, options, genURLFn) {
 		id: this.layerCounter,
 		title: title,
 		url: url,
-		options: options,
+		parameters: params,
 		genURLFn: genURLFn,
 		color: clrDefault,
 		olLayer: olLayer,
@@ -75,7 +75,7 @@ PGMap.prototype.layerLoad = function(lyr, doZoom) {
 	let src = lyr.olLayer.getSource();
 	src.clear();
 
-	var urlReq = lyr.genURLFn(lyr.url, lyr.options);
+	var urlReq = lyr.genURLFn(lyr.url, lyr.parameters);
 	/* ---------  // DEVELOPMENT ONLY
 	layerSetFeaturesMock(lyr);
 	this.layerZoom(lyr);
