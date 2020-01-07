@@ -46,7 +46,7 @@ PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	return [];
 }
 PGMap.prototype.layerAdd = function(title, url, options, genURLFn) {
-	var clrDefault = '#0000ff';
+	var clrDefault = chooseColor(this.layerCounter);
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
         source: src,
@@ -167,7 +167,22 @@ PGMap.prototype.onFeatureClick = function(fn) {
 		fn( feature );
 	});
 }
-
+function chooseColor(num) {
+	var COLORS = [
+		"#0000FF",
+		"#00FFFF",
+		"#6b5b95",
+		"#ff7b25",
+		"#b9936c",
+		"#405d27",
+		"#50394c",
+		"#80ced6",
+		"#618685",
+		"#bc5a45",
+		"#36486b"
+	];
+	return COLORS[ num % COLORS.length ];
+}
 function createStyleFunction(clr) {
 	var styles = createStyles(clr);
 	return function(feature) {
