@@ -121,6 +121,7 @@ PGMap.prototype.layerSetVisible = function(lyr, isVis) {
 	lyr.olLayer.setVisible(isVis);
 }
 PGMap.prototype.layerColor = function(lyr, clr) {
+	//console.log(clr);
 	lyr.olLayer.setStyle( createStyleFunction( clr ));
 }
 PGMap.prototype.installMousePos = function(id) {
@@ -170,16 +171,20 @@ PGMap.prototype.onFeatureClick = function(fn) {
 function chooseColor(num) {
 	var COLORS = [
 		"#0000FF",
+		"#880000",
+		"#00a000",
+		"#0000c0",
 		"#00FFFF",
 		"#6b5b95",
 		"#ff7b25",
-		"#b9936c",
+		"#896d51",
 		"#405d27",
 		"#50394c",
-		"#80ced6",
+		"#4e7d84",
 		"#618685",
 		"#bc5a45",
-		"#36486b"
+		"#36486b",
+		'#ff0000'
 	];
 	return COLORS[ num % COLORS.length ];
 }
