@@ -233,15 +233,15 @@ function uiLayerCreate(lyr) {
 			//$tools.hide();
         });
         */
-    var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
-		.text('R')
-		.attr('title', 'Reload Layer (Shift to use bbox)');
-    var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
-        .text('Z')
-        .attr('title', 'Zoom to Layer');
     var $toolInfo = $('<span>').addClass('layer-tool').appendTo($tools)
         .text('i')
         .attr('title', 'Layer info');
+    var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
+        .text('Z')
+        .attr('title', 'Zoom to Layer');
+    var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
+		.text('R')
+		.attr('title', 'Reload Layer (Shift to use bbox)');
 
     //--- Add Settings button for collections only
     if (lyr.parameters) {

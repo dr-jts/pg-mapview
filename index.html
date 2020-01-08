@@ -15,6 +15,7 @@
     <tr>
         <td class='header' width='50px'></td>
         <td class='header'>PG MapView</td>
+        <td class='header'><a class='help-btn' target='new' href='help.html'>?</a></td>
     </tr>
 </table>
 
@@ -63,11 +64,11 @@
         <tr><td class='panel-group-title' cellspan='2'>Service</td></tr>
         <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layer-host' style='width:90%;' value='http://localhost:9000'></td></tr>
         <tr><td class='panel-group-title' cellspan='2'>Collection</td></tr>
-        <tr><td></td><td><button id='btn-collection-read'>Query Collections</button></td></tr>
+        <tr><td class='panel-line-title'>Collection</td><td><input type="text" id='layer-name' style='width:90%;' value=''></td></tr>
         <tr><td class='panel-line-title'></td><td>
             <select id='collection-names' style='width:100%;' onchange="onChangeCollection(this, 'layer-name');" ></select>
             </td></tr>
-        <tr><td class='panel-line-title'>Collection</td><td><input type="text" id='layer-name' style='width:90%;' value=''></td></tr>
+        <tr><td></td><td><button id='btn-collection-read'>Query Collections</button></td></tr>
     </table>
     <table id='tbl-parameters' style='width:100%'>
         <tr><td class='panel-group-title' cellspan='2'>Parameters</td></tr>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>PG MapView - Help</title>
+<link rel="stylesheet" href="pgmapview.css">
+<style>
+body {
+    padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+<h1>PG MapView Help</h1>
+<p>
+This document describes how to use the capabilities of <a href='index.html'>PG-MapView</a>.
+</p>
+<p>
+<b>PG-MapView</b> is a simple web map client which allows displaying GeoJSON datasets
+obtained from servers implementing the
+<a target='new' href='http://docs.opengeospatial.org/is/17-069r3/17-069r3.html'>OGC API for Features</a>.
+</p>
+<h3>Add a Layer</h3>
+<p>
+    <ul>
+        <li>Click <button>Add...</button>.</li>
+        <li>Enter the following information to specify the layer:
+            <ul>
+                <li><b>URL</b> - the URL of the OAF service</li>
+                <li><b>Collection</b> - the name of the collection to query.
+                    The list of collections provided by the service can be
+                    obtained by clicking <button>Query Collections</button>
+                </li>
+            </ul>
+        </li>
+        <li>Optionally, enter layer query parameters:
+            <ul>
+                <li><b>Limit</b> - the maximum umber of features to provide in the response</li>
+                <li><b>Precision</b> - the number of decimals in GeoJSON ordinates</li>
+                <li><b>Bbox</b> - the extent of data to query.
+                    Click <button>Set from Map</button> to use the extent
+                    of the current map view.
+                </li>
+                <li><b>Transform</b> - one or more functions to use to transform the response geometry</li>
+            </ul>
+
+        </li>
+        <li>Click <button>Add</button> to create the new layer,
+            or <button>Cancel</button> to abort.</li>
+    </ul>
+
+
+</p>
+<h3>Working with Layers</h3>
+<ul>
+    <li>Click the checkbox to turn the layer on or off</li>
+    <li>Click the color button to change the color of the layer</li>
+    <li>Click the layer name to show the <b>Layer Control panel</b>
+
+    </li>
+</ul>
+<h3>Layer Control panel</h3>
+<ul>
+    <li><span class='layer-tool'>X</span> - deletes the layer from the map</li>
+    <li><span class='layer-tool'>i</span> - shows the layer info box</li>
+    <li><span class='layer-tool'>Z</span> - zooms to the layer extent</li>
+    <li><span class='layer-tool'>R</span> - requeries the layer.
+    Shift-click uses the current map extent.</li>
+    <li><span class='layer-tool'>S</span> - change the layer settings</li>
+</ul>
+    </body>
+</html>
