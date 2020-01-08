@@ -275,7 +275,7 @@ function uiLayerCreate(lyr) {
     })
     $toolReload.click(function(evt) {
         var updateBbox = evt.shiftKey;
-        if (updateBbox && lyr.options) {
+        if (updateBbox && lyr.parameters) {
             lyr.parameters.bbox = map.mapExtentStr();
         }
         layerLoad(lyr, false);
