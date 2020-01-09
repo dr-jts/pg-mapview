@@ -31,20 +31,24 @@ button {
     position:absolute; top:40px; bottom:0px; left: 220px; right:0px;
 }
 .sidebar {
-    position:absolute; top:40px; bottom:0px; left: 0px; width:200px;
+    position:absolute; top:40px; bottom:0px; left: 0px;
+    width: 210px;
     background-color: #dee6f8;
-    padding: 10px;
+    padding: 6px;
 }
 .sidebar-title {
     font-weight: bold;
     font-size: 16px;
     color: #0167B4;
+    background-color: #bcc8f5;
+    border-radius: 8px;
+    padding: 5px;
 }
 .layer-list-item {
     margin: 5px;
 }
 .layer-name {
-
+    font-size: 14px;
 }
 .layer-name-error {
     color: red;
