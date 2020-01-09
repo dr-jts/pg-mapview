@@ -35,6 +35,11 @@ button {
     background-color: #dee6f8;
     padding: 10px;
 }
+.sidebar-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #0167B4;
+}
 .layer-list-item {
     margin: 5px;
 }
