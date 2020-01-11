@@ -10,14 +10,37 @@ document.getElementById('btn-layer-bbox-use-map').onclick = function() {
     document.getElementById('layer-bbox').value = bboxStr;
 }
 
-document.getElementById('radio-layer-type-resource').onclick = function() {
-    $('#layer-url-panel').show();
-    $('#layer-collection-panel').hide();
+document.getElementById('radio-layer-tab-resource').onclick = function() {
+    layerTabShow('layer-tab-url');
 }
+document.getElementById('radio-layer-tab-collection').onclick = function() {
+    layerTabShow('layer-tab-collection');
+}
+document.getElementById('radio-layer-tab-vt').onclick = function() {
+    layerTabShow('layer-tab-vt');
+}
+function layerTabShow(id) {
+    $('.layer-tab-panel').hide();
+    if (! id) return;
+    $('#'+id).show();
 
-document.getElementById('radio-layer-type-collection').onclick = function() {
-    $('#layer-url-panel').hide();
-    $('#layer-collection-panel').show();
+    $('.radio-layer-tab').prop('checked', false);
+    $('#radio-' + id).prop('checked', true );
+}
+const LAYER_TYPE_COLLECTION = 'collection';
+const LAYER_TYPE_RESOURCE = 'resource';
+const LAYER_TYPE_VT = 'vt';
+
+function layerTabType() {
+    if (document.getElementById('radio-layer-tab-collection').checked) {
+        return LAYER_TYPE_COLLECTION;
+    }
+    if (document.getElementById('radio-layer-tab-resource').checked) {
+        return LAYER_TYPE_RESOURCE;
+    }
+    if (document.getElementById('radio-layer-tab-vt').checked) {
+        return LAYER_TYPE_VT;
+    }
 }
 document.getElementById('btn-transform-clear').onclick = function() {
     document.getElementById('layer-transform').value = '';
@@ -36,10 +59,7 @@ function uiShowLayerAdd() {
     $('#btn-layer-update').hide();
 
     $('.layer-panel-tabs').show();
-    $('#layer-collection-panel').show();
-    $('#layer-url-panel').hide();
-    $('#radio-layer-type-collection').prop('checked', true);
-    $('#radio-layer-type-resource').prop('checked', false);
+    layerTabShow('layer-tab-collection');
 
     $('#tbl-collection-url').show();
 
@@ -55,6 +75,7 @@ function uiShowLayerAdd() {
 
     panelShow('panel-layer-add', true);
 }
+
 var layerToUpdate = null;
 function uiShowLayerUpdate(layer) {
     layerToUpdate = layer;
@@ -64,8 +85,9 @@ function uiShowLayerUpdate(layer) {
     $('#btn-layer-update').show();
 
     $('.layer-panel-tabs').hide();
-    $('#layer-collection-panel').toggle(isCollection);
-    $('#layer-url-panel').toggle(! isCollection);
+    layerTabShow( isCollection ? 'layer-tab-collection': 'layer-tab-url' );
+    //$('#layer-tab-collection').toggle(isCollection);
+    //$('#layer-url-panel').toggle(! isCollection);
 
     $('#tbl-collection-url').hide();
 
@@ -107,17 +129,26 @@ var btnLayerAdd = document.getElementById('btn-layer-add');
 btnLayerAdd.onclick = function() {
     panelShow('panel-layer-add', false);
 
+    var layerType = layerTabType();
+    if (layerType == LAYER_TYPE_VT) {
+        layerAddVT();
+        return;
+    }
+    layerAddDataset();
+}
+function layerAddDataset() {
+    var layerType = layerTabType();
     var url = document.getElementById('layer-url').value;
     var title = document.getElementById('layer-title').value;
     var name = document.getElementById('layer-name').value;
     if (title.length == 0) title = name;
 
     var lyr;
-    if (url.length > 0) {
-       var title = collectionName(url);
-       lyr = addLayerDataset(title, url);
+    if (layerType == LAYER_TYPE_RESOURCE) {
+        var title = collectionName(url);
+        lyr = addLayerDataset(title, url);
     }
-    else {
+    else if (layerType == LAYER_TYPE_COLLECTION) {
         var host = document.getElementById('layer-host').value;
         url = urlOafItems(host, name);
         var params = layerParamsRead();
@@ -189,7 +220,7 @@ var LAYER_NAME_PREF = 'lyr-name-' ;
 function uiLayerCreate(lyr, isVT) {
     var self = this;
 
-    var listID = isVT ? '#layervt-list' : '#layer-list';
+    var listID = '#layer-list';
     var $div = $('<div class="layer-list-item">');
     $div.prependTo( $(listID) );
 
@@ -238,13 +269,16 @@ function uiLayerCreate(lyr, isVT) {
     if (! isVT) {
         var $toolInfo = $('<span>').addClass('layer-tool').appendTo($tools)
             .text('i')
-            .attr('title', 'Layer info');
+            .attr('title', 'Layer info')
+            .click( doInfo );
         var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
             .text('Z')
-            .attr('title', 'Zoom to Layer');
+            .attr('title', 'Zoom to Layer')
+            .click( doZoom );
         var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
             .text('R')
-            .attr('title', 'Reload Layer (Shift to use bbox)');
+            .attr('title', 'Reload Layer (Shift to use bbox)')
+            .click( doReload );
     }
     //--- Add Settings button for collections only
     if (! isVT && lyr.parameters) {
@@ -276,19 +310,19 @@ function uiLayerCreate(lyr, isVT) {
         map.removeLayer(lyr);
         $div.remove();
     })
-    $toolReload.click(function(evt) {
+    function doReload(evt) {
         var updateBbox = evt.shiftKey;
         if (updateBbox && lyr.parameters) {
             lyr.parameters.bbox = map.mapExtentStr();
         }
         layerLoad(lyr, false);
-    })
-    $toolZoom.click(function() {
+    }
+    function doZoom() {
         map.layerZoom(lyr);
-    })
-    $toolInfo.click(function() {
+    }
+    function doInfo() {
         uiLayerInfo(lyr);
-    })
+    }
     $toolColor.change(function() {
         map.layerColor( lyr, $toolColor.val() );
     });

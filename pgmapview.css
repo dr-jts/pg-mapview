@@ -113,8 +113,10 @@ button {
 }
 .layer-panel-tabs {
     margin: 10px 0px 10px 0px;
+    padding: 6px;
     font-size: 10pt;
     color: blue;
+    background-color: #bcc8f5;
 }
 .identify-content-panel {
     position: absolute;
