@@ -26,9 +26,10 @@
 </div>
 
 <div class='sidebar'>
-    <div class='sidebar-title'>Data Layers &nbsp; <button id='btn-layer-add-show'>Add...</button></div>
-    <div id='layer-list'>
-    </div>
+    <div class='sidebar-header'>Data Layers &nbsp; <button id='btn-layer-add-show'>Add...</button></div>
+    <div id='layer-list'></div>
+    <div class='sidebar-header'>Tile Layers &nbsp; <button id='btn-layervt-add-show'>Add...</button></div>
+    <div id='layervt-list'></div>
 </div>
 <div id='ol-mousepos' class='ol-mousepos'>&nbsp;</div>
 
@@ -119,6 +120,20 @@
             <button id='btn-layer-add-cancel'>Cancel</button>
     </div>
 </div>
+<div class='layer-panel panel' id='panel-layervt-add'>
+    <div style='margin-bottom: 10px;'>Add Layer</div>
+    <div><span class='panel-line-title'>Title</span> <input type="text" id='layervt-title' style='width:90%;'></div>
+     <table style='width:100%'>
+        <tr><td class='panel-group-title' cellspan='2'>Service</td></tr>
+        <tr><td class='panel-line-title'>URL</td><td><input type="text" id='layervt-host' style='width:90%;' value='http://localhost:7800'></td></tr>
+        <tr><td class='panel-group-title' cellspan='2'>Name</td></tr>
+        <tr><td class='panel-line-title'>Name</td><td><input type="text" id='layervt-name' style='width:90%;' value=''></td></tr>
+    </table>
+    <div>
+        <button id='btn-layervt-add'>Add</button>
+        <button id='btn-layervt-add-cancel'>Cancel</button>
+    </div>
+</div>
 <div id="popup-container" class="arrow_box" style='display:none;'></div>
 
 <script type="text/javascript" src="lib/jquery-1.9.1.min.js"></script>
@@ -126,6 +141,7 @@
 <script src="util.js"></script>
 <script src="PGMap.js"></script>
 <script src="pgmapview-ui.js"></script>
+<script src="pgmapview-vt-ui.js"></script>
 <script src="pgmapview.js"></script>
 <script src="mockdata.js"></script>
 

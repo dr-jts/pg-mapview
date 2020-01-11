@@ -20,6 +20,33 @@ function PGMap(divid, options) {
 	});
 	//this._installOverlay();
 	this.layerCounter = 0;
+
+	//TEST_addMVT(this.map);
+}
+const styleParcel = new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: '#80ff8010'
+    }),
+    stroke: new ol.style.Stroke({
+        color: '#007000',
+        width: 1
+      })
+});
+function TEST_addMVT(olmap) {
+	var url = "http://localhost:7800";
+	const layerData = new ol.layer.VectorTile({
+		className: "dataLayer", // needed to avoid base labels disappearing?
+		style: styleParcel,
+		//declutter: true,
+		minZoom: 5,
+		source: new ol.source.VectorTile({
+			format: new ol.format.MVT(),
+			url: url + '/ebc.voting_area/{z}/{x}/{y}.pbf',
+			minZoom: 5,
+			maxZoom: 16
+		})
+	});
+	olmap.addLayer(layerData);
 }
 PGMap.prototype.mapExtentGeo = function() {
 	var extent = this.map.getView().calculateExtent(this.map.getSize());
@@ -68,7 +95,34 @@ PGMap.prototype.layerAdd = function(title, url, params, genURLFn) {
 	}
 	return lyr;
 }
-
+PGMap.prototype.layerVTAdd = function(title, urlLayer) {
+	var clrDefault = chooseColor(this.layerCounter);
+	var url = urlLayer + '/{z}/{x}/{y}.pbf';
+	const olLayer= new ol.layer.VectorTile({
+		className: "dataLayer", // needed to avoid base labels disappearing?
+		style: createStyleFunction(clrDefault),
+		//declutter: true,
+		minZoom: 5,
+		source: new ol.source.VectorTile({
+			format: new ol.format.MVT(),
+			url: url,
+			minZoom: 5,
+			maxZoom: 16
+		})
+	});
+	this.map.addLayer(olLayer);
+	this.layerCounter++;
+	let lyr = {
+		id: this.layerCounter,
+		title: title,
+		url: url,
+		color: clrDefault,
+		olLayer: olLayer,
+		loadTime: 0,
+		textStatus: ''
+	}
+	return lyr;
+}
 PGMap.prototype.layerLoad = function(lyr, doZoom) {
 	let self = this;
 

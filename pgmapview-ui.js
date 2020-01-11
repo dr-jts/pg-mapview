@@ -186,11 +186,13 @@ function onChangeTransform(select, targetID) {
 }
 var LAYER_NAME_PREF = 'lyr-name-' ;
 
-function uiLayerCreate(lyr) {
+function uiLayerCreate(lyr, isVT) {
     var self = this;
 
+    var listID = isVT ? '#layervt-list' : '#layer-list';
     var $div = $('<div class="layer-list-item">');
-    $div.prependTo( $('#layer-list') );
+    $div.prependTo( $(listID) );
+
     var $chkVis = $('<input type="checkbox" class="checkbox-single"/>')
                 .prop('checked', true)
                 .appendTo( $div );
@@ -233,18 +235,19 @@ function uiLayerCreate(lyr) {
 			//$tools.hide();
         });
         */
-    var $toolInfo = $('<span>').addClass('layer-tool').appendTo($tools)
-        .text('i')
-        .attr('title', 'Layer info');
-    var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
-        .text('Z')
-        .attr('title', 'Zoom to Layer');
-    var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
-		.text('R')
-		.attr('title', 'Reload Layer (Shift to use bbox)');
-
+    if (! isVT) {
+        var $toolInfo = $('<span>').addClass('layer-tool').appendTo($tools)
+            .text('i')
+            .attr('title', 'Layer info');
+        var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
+            .text('Z')
+            .attr('title', 'Zoom to Layer');
+        var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
+            .text('R')
+            .attr('title', 'Reload Layer (Shift to use bbox)');
+    }
     //--- Add Settings button for collections only
-    if (lyr.parameters) {
+    if (! isVT && lyr.parameters) {
         var $toolSettings = $('<span>').addClass('layer-tool').appendTo($tools)
             .text('S')
             .attr('title', 'Layer settings');
@@ -360,4 +363,5 @@ function panelsHide() {
     $('.identify-panel').hide();
     $('.info-panel').hide();
     $('.layer-panel').hide();
+    $('.layervt-panel').hide();
 }

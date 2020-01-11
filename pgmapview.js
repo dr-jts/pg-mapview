@@ -8,6 +8,10 @@ function addLayer(name, url, options) {
     let lyr = map.layerAdd(name, url, options,makeOafUrl );
     return lyr;
 }
+function addLayerVT(name, url, options) {
+    let lyr = map.layerVTAdd(name, url, options,makeOafUrl );
+    return lyr;
+}
 function makeOafUrl(urlBase, opt) {
     url = urlOafAddParams(urlBase, opt);
     return url;
