@@ -20,13 +20,14 @@ This document describes how to use the capabilities of <a href='index.html'>PG-M
 obtained from servers implementing the
 <a target='new' href='http://docs.opengeospatial.org/is/17-069r3/17-069r3.html'>OGC API for Features</a>.
 </p>
-<h3>Add a Layer</h3>
+<h3>Add a OGC API for Features Layer</h3>
 <p>
     <ul>
         <li>Click <button>Add...</button>.</li>
+        <li>Click <input type='radio'> <span class=''>Collection</span>.</li>
         <li>Enter the following information to specify the layer:
             <ul>
-                <li><b>URL</b> - the URL of the OAF service</li>
+                <li><b>URL</b> - the URL of the OAFeat service</li>
                 <li><b>Collection</b> - the name of the collection to query.
                     The list of collections provided by the service can be
                     obtained by clicking <button>Query Collections</button>
@@ -45,11 +46,25 @@ obtained from servers implementing the
             </ul>
 
         </li>
-        <li>Click <button>Add</button> to create the new layer,
+        <li>Click <button>Add</button> to create the layer,
             or <button>Cancel</button> to abort.</li>
     </ul>
-
-
+</p>
+<h3>Add a Vector Tile Layer</h3>
+<p>
+    <ul>
+        <li>Click <button>Add...</button>.</li>
+        <li>Click <input type='radio'> <b>Vector Tile</b>.</li>
+        <li>Enter the following information to specify the layer:
+            <ul>
+                <li><b>URL</b> - the URL of the Vector Tile service</li>
+                <li><b>Name</b> - the name of the layer to display.
+                </li>
+            </ul>
+        </li>
+        <li>Click <button>Add</button> to create the layer,
+            or <button>Cancel</button> to abort.</li>
+    </ul>
 </p>
 <h3>Working with Layers</h3>
 <ul>
