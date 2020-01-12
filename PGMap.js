@@ -1,58 +1,33 @@
-function PGMap(divid, options) {
-    this.map = new ol.Map({
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM({
-                    "url" : "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"
-                })
-            }),
-        ],
-        target: divid,
-        controls: ol.control.defaults({
-            attributionOptions: {
-                collapsible: false
-            }
-        }),
-        view: new ol.View({
-            center: ol.proj.fromLonLat([0,0]),
-            zoom: 1
-        })
+
+class PGMap {
+constructor(divid, options) {
+	this.map = new ol.Map({
+		layers: [
+			new ol.layer.Tile({
+				source: new ol.source.OSM({
+					"url" : "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"
+				})
+			}),
+		],
+		target: divid,
+		controls: ol.control.defaults({
+			attributionOptions: {
+				collapsible: false
+			}
+		}),
+		view: new ol.View({
+			center: ol.proj.fromLonLat([0,0]),
+			zoom: 1
+		})
 	});
 	//this._installOverlay();
 	this.layerCounter = 0;
-
-	//TEST_addMVT(this.map);
 }
-const styleParcel = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: '#80ff8010'
-    }),
-    stroke: new ol.style.Stroke({
-        color: '#007000',
-        width: 1
-      })
-});
-function TEST_addMVT(olmap) {
-	var url = "http://localhost:7800";
-	const layerData = new ol.layer.VectorTile({
-		className: "dataLayer", // needed to avoid base labels disappearing?
-		style: styleParcel,
-		//declutter: true,
-		minZoom: 5,
-		source: new ol.source.VectorTile({
-			format: new ol.format.MVT(),
-			url: url + '/ebc.voting_area/{z}/{x}/{y}.pbf',
-			minZoom: 5,
-			maxZoom: 16
-		})
-	});
-	olmap.addLayer(layerData);
-}
-PGMap.prototype.mapExtentGeo = function() {
+mapExtentGeo() {
 	var extent = this.map.getView().calculateExtent(this.map.getSize());
 	return ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
 }
-PGMap.prototype.mapExtentStr = function(numDecimals) {
+mapExtentStr(numDecimals) {
 	var fix = 4
 	if (numDecimals) fix = numDecimals;
     var bbox = this.mapExtentGeo()
@@ -63,7 +38,7 @@ PGMap.prototype.mapExtentStr = function(numDecimals) {
 	var bboxStr = minx + "," + miny + "," + maxx + "," + maxy;
 	return bboxStr;
 }
-PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
+readCollections(urlService, fnDone, fnFail) {
 	var url = urlService + "/collections";
 	$.getJSON( url, {})
 	.done (function(data) {
@@ -72,7 +47,7 @@ PGMap.prototype.readCollections = function(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-PGMap.prototype.layerAdd = function(title, url, params, genURLFn) {
+layerAdd (title, url, params, genURLFn) {
 	var clrDefault = chooseColor(this.layerCounter);
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
@@ -95,7 +70,7 @@ PGMap.prototype.layerAdd = function(title, url, params, genURLFn) {
 	}
 	return lyr;
 }
-PGMap.prototype.layerVTAdd = function(title, urlLayer) {
+layerVTAdd(title, urlLayer) {
 	var clrDefault = chooseColor(this.layerCounter);
 	var url = urlLayer + '/{z}/{x}/{y}.pbf';
 	const olLayer= new ol.layer.VectorTile({
@@ -123,7 +98,7 @@ PGMap.prototype.layerVTAdd = function(title, urlLayer) {
 	}
 	return lyr;
 }
-PGMap.prototype.layerLoad = function(lyr, doZoom) {
+layerLoad(lyr, doZoom) {
 	let self = this;
 
 	let src = lyr.olLayer.getSource();
@@ -160,25 +135,24 @@ PGMap.prototype.layerLoad = function(lyr, doZoom) {
 	  );
 	  return prom;
 }
-
-PGMap.prototype.layerZoom = function(lyr) {
+layerZoom(lyr) {
 	let olmap = this.map;
 	let lyrext = lyr.olLayer.getSource().getExtent();
 	let sz = Math.max( ol.extent.getWidth(lyrext), ol.extent.getHeight(lyrext) );
 	let ext = ol.extent.buffer( lyrext,  0.2 * sz);
     olmap.getView().fit( ext, olmap.getSize());
 }
-PGMap.prototype.removeLayer = function(lyr) {
+removeLayer(lyr) {
 	this.map.removeLayer(lyr.olLayer);
 }
-PGMap.prototype.layerSetVisible = function(lyr, isVis) {
+layerSetVisible(lyr, isVis) {
 	lyr.olLayer.setVisible(isVis);
 }
-PGMap.prototype.layerColor = function(lyr, clr) {
+layerColor(lyr, clr) {
 	//console.log(clr);
 	lyr.olLayer.setStyle( createStyleFunction( clr ));
 }
-PGMap.prototype.installMousePos = function(id) {
+installMousePos (id) {
     var map = this.map;
     map.on('pointermove', (evt) => {
         let ptGeo = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
@@ -187,8 +161,7 @@ PGMap.prototype.installMousePos = function(id) {
         divPos.innerHTML = pFormat + ' / ' + map.getView().getZoom().toFixed(1);
     });
 }
-
-PGMap.prototype._installOverlay = function() {
+_installOverlay() {
 	let map = this.map;
 	let overlay = new ol.Overlay({
 		element: document.getElementById('popup-container'),
@@ -209,7 +182,7 @@ PGMap.prototype._installOverlay = function() {
 		}
 	});
 }
-PGMap.prototype.onFeatureClick = function(fn) {
+onFeatureClick(fn) {
 	let map = this.map;
 	this.map.on('click', function(evt) {
 		var features = map.getFeaturesAtPixel(evt.pixel);
@@ -221,6 +194,7 @@ PGMap.prototype.onFeatureClick = function(fn) {
 		// call even if feature not found, to allow updating UI
 		fn( feature );
 	});
+}
 }
 function chooseColor(num) {
 	var COLORS = [
@@ -248,7 +222,6 @@ function createStyleFunction(clr) {
 		return styles[feature.getGeometry().getType()];
 	}
 }
-
 function createStyles(clr) {
 	var clrFill = clr + '20';
 	var imageCircle = new ol.style.Circle({
