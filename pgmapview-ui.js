@@ -34,25 +34,17 @@ const LAYER_TYPE = {
 }
 
 function layerTabType() {
-    if (document.getElementById('radio-layer-tab-fc').checked) {
-        return LAYER_TYPE.FC;
-    }
-    if (document.getElementById('radio-layer-tab-ds').checked) {
-        return LAYER_TYPE.DS;
-    }
-    if (document.getElementById('radio-layer-tab-vt').checked) {
-        return LAYER_TYPE.VT;
-    }
+    if (document.getElementById('radio-layer-tab-fc').checked) { return LAYER_TYPE.FC; }
+    if (document.getElementById('radio-layer-tab-ds').checked) { return LAYER_TYPE.DS; }
+    if (document.getElementById('radio-layer-tab-vt').checked) { return LAYER_TYPE.VT; }
 }
 document.getElementById('btn-transform-clear').onclick = function() {
     document.getElementById('layer-transform').value = '';
 }
-
 document.getElementById('btn-collection-read').onclick = function() {
     var url = document.getElementById('layer-host').value;
     // display temporary loading msg
-    addOptions('#collection-names',
-        [{ text: 'Loading...', value: '' }], true)
+    addOptions('#collection-names', [{ text: 'Loading...', value: '' }], true)
     var colls = MAP.readCollections(url, loadSelectCollections);
 }
 

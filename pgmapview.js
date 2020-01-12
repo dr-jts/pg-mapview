@@ -19,8 +19,8 @@ function addLayerDataset(name, url) {
     return lyr;
 }
 class OAF {
-    static urlItems(host, name, limit, bbox, trans) {
-        var url = host + "/collections/" + name + "/items";
+    static urlItems(host, name) {
+        var url = `${host}/collections/${name}/items`;
         return url;
     }
     static urlWithParams(url, param) {
@@ -32,9 +32,9 @@ class OAF {
     }
     static addQueryParam(url, name, value) {
         if (! value || value.length <= 0) return url;
-        hasQuery = url.indexOf('?') >= 0;
-        var newUrl = url + (hasQuery ? '&' : '?')
-                + name + '=' + value;
+        let hasQuery = url.indexOf('?') >= 0;
+        let  delim = hasQuery ? '&' : '?';
+        let  newUrl = `${url}${delim}${name}=${value}`;
         return newUrl;
     }
 }
