@@ -10,11 +10,11 @@ document.getElementById('btn-layer-bbox-use-map').onclick = function() {
     document.getElementById('layer-bbox').value = bboxStr;
 }
 
-document.getElementById('radio-layer-tab-resource').onclick = function() {
-    layerTabShow('layer-tab-url');
+document.getElementById('radio-layer-tab-ds').onclick = function() {
+    layerTabShow('layer-tab-ds');
 }
-document.getElementById('radio-layer-tab-collection').onclick = function() {
-    layerTabShow('layer-tab-collection');
+document.getElementById('radio-layer-tab-fc').onclick = function() {
+    layerTabShow('layer-tab-fc');
 }
 document.getElementById('radio-layer-tab-vt').onclick = function() {
     layerTabShow('layer-tab-vt');
@@ -27,19 +27,21 @@ function layerTabShow(id) {
     $('.radio-layer-tab').prop('checked', false);
     $('#radio-' + id).prop('checked', true );
 }
-const LAYER_TYPE_COLLECTION = 'collection';
-const LAYER_TYPE_RESOURCE = 'resource';
-const LAYER_TYPE_VT = 'vt';
+const LAYER_TYPE = {
+    FC: 'fc',
+    DS: 'ds',
+    VT: 'vt'
+}
 
 function layerTabType() {
-    if (document.getElementById('radio-layer-tab-collection').checked) {
-        return LAYER_TYPE_COLLECTION;
+    if (document.getElementById('radio-layer-tab-fc').checked) {
+        return LAYER_TYPE.FC;
     }
-    if (document.getElementById('radio-layer-tab-resource').checked) {
-        return LAYER_TYPE_RESOURCE;
+    if (document.getElementById('radio-layer-tab-ds').checked) {
+        return LAYER_TYPE.DS;
     }
     if (document.getElementById('radio-layer-tab-vt').checked) {
-        return LAYER_TYPE_VT;
+        return LAYER_TYPE.VT;
     }
 }
 document.getElementById('btn-transform-clear').onclick = function() {
@@ -59,7 +61,7 @@ function uiShowLayerAdd() {
     $('#btn-layer-update').hide();
 
     $('.layer-panel-tabs').show();
-    layerTabShow('layer-tab-collection');
+    layerTabShow('layer-tab-fc');
 
     $('#tbl-collection-url').show();
 
@@ -130,7 +132,7 @@ btnLayerAdd.onclick = function() {
     panelShow('panel-layer-add', false);
 
     var layerType = layerTabType();
-    if (layerType == LAYER_TYPE_VT) {
+    if (layerType == LAYER_TYPE.VT) {
         layerAddVT();
         return;
     }
@@ -144,11 +146,11 @@ function layerAddDataset() {
     if (title.length == 0) title = name;
 
     var lyr;
-    if (layerType == LAYER_TYPE_RESOURCE) {
+    if (layerType == LAYER_TYPE.DS) {
         var title = collectionName(url);
         lyr = addLayerDataset(title, url);
     }
-    else if (layerType == LAYER_TYPE_COLLECTION) {
+    else if (layerType == LAYER_TYPE.FC) {
         var host = document.getElementById('layer-host').value;
         url = OAF.urlItems(host, name);
         var params = layerParamsRead();
