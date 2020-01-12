@@ -41,10 +41,10 @@ function layerTabType() {
 document.getElementById('btn-transform-clear').onclick = function() {
     document.getElementById('layer-transform').value = '';
 }
-document.getElementById('btn-collection-read').onclick = function() {
+document.getElementById('btn-fc-read').onclick = function() {
     var url = document.getElementById('layer-host').value;
     // display temporary loading msg
-    addOptions('#collection-names', [{ text: 'Loading...', value: '' }], true)
+    addOptions('#fc-names', [{ text: 'Loading...', value: '' }], true)
     var colls = MAP.readCollections(url, loadSelectCollections);
 }
 
@@ -55,7 +55,7 @@ function uiShowLayerAdd() {
     $('.layer-panel-tabs').show();
     layerTabShow('layer-tab-fc');
 
-    $('#tbl-collection-url').show();
+    $('#tbl-fc-url').show();
 
     //----- reset Layer panel
     document.getElementById('layer-url').value = '';
@@ -79,11 +79,11 @@ function uiShowLayerUpdate(layer) {
     $('#btn-layer-update').show();
 
     $('.layer-panel-tabs').hide();
-    layerTabShow( isCollection ? 'layer-tab-collection': 'layer-tab-url' );
+    layerTabShow( isCollection ? 'layer-tab-fc': 'layer-tab-ds' );
     //$('#layer-tab-collection').toggle(isCollection);
     //$('#layer-url-panel').toggle(! isCollection);
 
-    $('#tbl-collection-url').hide();
+    $('#tbl-fc-url').hide();
 
     //--- populate panel from layer
     document.getElementById('layer-title').value = layer.title;
@@ -107,8 +107,8 @@ function loadSelectCollections(collections) {
             value: collections[i].id
         });
     }
-    addOptions('#collection-names', [{text: 'Set collection...', value: ''}], true)
-    addOptions('#collection-names', options, false)
+    addOptions('#fc-names', [{text: 'Set collection...', value: ''}], true)
+    addOptions('#fc-names', options, false)
 }
 
 function addOptions(selectId, options, clear) {
