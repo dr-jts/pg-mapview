@@ -6,7 +6,7 @@ document.getElementById('btn-layer-add-cancel').onclick = function() {
 }
 
 document.getElementById('btn-layer-bbox-use-map').onclick = function() {
-    var bboxStr = map.extentStr(4);
+    var bboxStr = MAP.extentStr(4);
     document.getElementById('layer-bbox').value = bboxStr;
 }
 
@@ -51,7 +51,7 @@ document.getElementById('btn-collection-read').onclick = function() {
     // display temporary loading msg
     addOptions('#collection-names',
         [{ text: 'Loading...', value: '' }], true)
-    var colls = map.readCollections(url, loadSelectCollections);
+    var colls = MAP.readCollections(url, loadSelectCollections);
 }
 
 function uiShowLayerAdd() {
@@ -150,7 +150,7 @@ function layerAddDataset() {
     }
     else if (layerType == LAYER_TYPE_COLLECTION) {
         var host = document.getElementById('layer-host').value;
-        url = urlOafItems(host, name);
+        url = OAF.urlItems(host, name);
         var params = layerParamsRead();
         lyr = addLayer(title, url, params);
     }
@@ -187,7 +187,7 @@ btnLayerUpdate.onclick = function() {
 }
 
 function layerLoad(lyr, doZoom) {
-    var prom = map.layerLoad(lyr, doZoom);
+    var prom = MAP.layerLoad(lyr, doZoom);
     prom.done(function() {
         uiLayerError(lyr, false);
     });
@@ -293,7 +293,7 @@ function uiLayerCreate(lyr, isVT) {
     $chkVis.click(function () {
         var isVisible = $(this).is(':checked');
         //lyr.visibility = isVisible;
-        map.layerSetVisible(lyr, isVisible);
+        MAP.layerSetVisible(lyr, isVisible);
         //self.clearTime();
     } )
     /*
@@ -307,24 +307,24 @@ function uiLayerCreate(lyr, isVT) {
     });
     */
     $toolRemove.click(function() {
-        map.removeLayer(lyr);
+        MAP.removeLayer(lyr);
         $div.remove();
     })
     function doReload(evt) {
         var updateBbox = evt.shiftKey;
         if (updateBbox && lyr.parameters) {
-            lyr.parameters.bbox = map.extentStr();
+            lyr.parameters.bbox = MAP.extentStr();
         }
         layerLoad(lyr, false);
     }
     function doZoom() {
-        map.layerZoom(lyr);
+        MAP.layerZoom(lyr);
     }
     function doInfo() {
         uiLayerInfo(lyr);
     }
     $toolColor.change(function() {
-        map.layerColor( lyr, $toolColor.val() );
+        MAP.layerColor( lyr, $toolColor.val() );
     });
 }
 $('.panel-closer').click(function() {

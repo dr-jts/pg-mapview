@@ -1,46 +1,40 @@
 
-map = new PGMap('map');
+MAP = new PGMap('map');
 
-map.installMousePos('ol-mousepos')
-map.onFeatureClick(  uiIdentifyFeature );
+MAP.installMousePos('ol-mousepos')
+MAP.onFeatureClick(  uiIdentifyFeature );
 
 function addLayer(name, url, options) {
-    let lyr = map.addLayer(name, url, options, makeOafUrl );
+    let lyr = MAP.addLayer(name, url, options, OAF.urlWithParams );
     return lyr;
 }
 function addLayerVT(name, url, options) {
-    let lyr = map.addLayerVT(name, url, options, makeOafUrl );
+    let lyr = MAP.addLayerVT(name, url, options, OAF.urlWithParams );
     return lyr;
 }
-function makeOafUrl(urlBase, opt) {
-    url = urlOafAddParams(urlBase, opt);
-    return url;
-}
-
 function addLayerDataset(name, url) {
-    let lyr = map.layerAdd(name, url, null, function(url) {
+    let lyr = MAP.layerAdd(name, url, null, function(url) {
         return url
     });
     return lyr;
 }
-
-function urlOafItems(host, name, limit, bbox, trans)
-{
-    var url = host + "/collections/" + name + "/items";
-    return url;
-}
-function urlOafAddParams(url, param)
-{
-    url = addQueryParam(url, "limit", param.limit);
-    url = addQueryParam(url, "bbox", param.bbox);
-    url = addQueryParam(url, "precision", param.precision);
-    url = addQueryParam(url, "transform", param.transform);
-    return url;
-}
-function addQueryParam(url, name, value) {
-    if (! value || value.length <= 0) return url;
-    hasQuery = url.indexOf('?') >= 0;
-    var newUrl = url + (hasQuery ? '&' : '?')
-            + name + '=' + value;
-    return newUrl;
+class OAF {
+    static urlItems(host, name, limit, bbox, trans) {
+        var url = host + "/collections/" + name + "/items";
+        return url;
+    }
+    static urlWithParams(url, param) {
+        url = OAF.addQueryParam(url, "limit", param.limit);
+        url = OAF.addQueryParam(url, "bbox", param.bbox);
+        url = OAF.addQueryParam(url, "precision", param.precision);
+        url = OAF.addQueryParam(url, "transform", param.transform);
+        return url;
+    }
+    static addQueryParam(url, name, value) {
+        if (! value || value.length <= 0) return url;
+        hasQuery = url.indexOf('?') >= 0;
+        var newUrl = url + (hasQuery ? '&' : '?')
+                + name + '=' + value;
+        return newUrl;
+    }
 }
