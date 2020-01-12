@@ -6,7 +6,7 @@ document.getElementById('btn-layer-add-cancel').onclick = function() {
 }
 
 document.getElementById('btn-layer-bbox-use-map').onclick = function() {
-    var bboxStr = map.mapExtentStr(4);
+    var bboxStr = map.extentStr(4);
     document.getElementById('layer-bbox').value = bboxStr;
 }
 
@@ -313,7 +313,7 @@ function uiLayerCreate(lyr, isVT) {
     function doReload(evt) {
         var updateBbox = evt.shiftKey;
         if (updateBbox && lyr.parameters) {
-            lyr.parameters.bbox = map.mapExtentStr();
+            lyr.parameters.bbox = map.extentStr();
         }
         layerLoad(lyr, false);
     }

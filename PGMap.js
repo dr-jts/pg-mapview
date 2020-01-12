@@ -23,14 +23,14 @@ constructor(divid, options) {
 	//this._installOverlay();
 	this.layerCounter = 0;
 }
-mapExtentGeo() {
+extentGeo() {
 	var extent = this.map.getView().calculateExtent(this.map.getSize());
 	return ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
 }
-mapExtentStr(numDecimals) {
+extentStr(numDecimals) {
 	var fix = 4
 	if (numDecimals) fix = numDecimals;
-    var bbox = this.mapExtentGeo()
+    var bbox = this.extentGeo()
     var minx = bbox[0].toFixed(4)
     var miny = bbox[1].toFixed(4)
     var maxx = bbox[2].toFixed(4)
@@ -47,7 +47,7 @@ readCollections(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-layerAdd (title, url, params, genURLFn) {
+addLayer(title, url, params, genURLFn) {
 	var clrDefault = chooseColor(this.layerCounter);
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
@@ -70,7 +70,7 @@ layerAdd (title, url, params, genURLFn) {
 	}
 	return lyr;
 }
-layerVTAdd(title, urlLayer) {
+addLayerVT(title, urlLayer) {
 	var clrDefault = chooseColor(this.layerCounter);
 	var url = urlLayer + '/{z}/{x}/{y}.pbf';
 	const olLayer= new ol.layer.VectorTile({

@@ -5,11 +5,11 @@ map.installMousePos('ol-mousepos')
 map.onFeatureClick(  uiIdentifyFeature );
 
 function addLayer(name, url, options) {
-    let lyr = map.layerAdd(name, url, options,makeOafUrl );
+    let lyr = map.addLayer(name, url, options, makeOafUrl );
     return lyr;
 }
 function addLayerVT(name, url, options) {
-    let lyr = map.layerVTAdd(name, url, options,makeOafUrl );
+    let lyr = map.addLayerVT(name, url, options, makeOafUrl );
     return lyr;
 }
 function makeOafUrl(urlBase, opt) {
