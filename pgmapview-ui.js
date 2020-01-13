@@ -126,29 +126,43 @@ btnLayerAdd.onclick = function() {
     var layerType = layerTabType();
     if (layerType == LAYER_TYPE.VT) {
         layerAddVT();
-        return;
     }
-    layerAddDataset();
+    else if (layerType == LAYER_TYPE.DS) {
+        layerAddDS();
+    }
+    else {
+        layerAddFC();
+    }
 }
-function layerAddDataset() {
-    var layerType = layerTabType();
-    var url = document.getElementById('layer-url').value;
+function layerAddVT() {
+
     var title = document.getElementById('layer-title').value;
-    var name = document.getElementById('layer-name').value;
+    var host = document.getElementById('layervt-host').value;
+    var name = document.getElementById('layervt-name').value;
     if (title.length == 0) title = name;
 
-    var lyr;
-    if (layerType == LAYER_TYPE.DS) {
-        var title = collectionName(url);
-        lyr = addLayerDataset(title, url);
-    }
-    else if (layerType == LAYER_TYPE.FC) {
-        var host = document.getElementById('layer-host').value;
-        url = OAF.urlItems(host, name);
-        var params = layerParamsRead();
-        lyr = addLayer(title, url, params);
-    }
+    url = host + "/" + name;
+    var lyr = addLayerVT(title, url);
 
+    uiLayerCreate(lyr, true);
+}
+function layerAddFC() {
+    let title = document.getElementById('layer-title').value;
+    let name = document.getElementById('layer-name').value;
+    if (title.length == 0) title = name;
+
+    let service = document.getElementById('layer-host').value;
+    let params = layerParamsRead();
+    let lyr = addLayerFC(title, service, name, params);
+    uiLayerCreate(lyr);
+    layerLoad(lyr, true);
+}
+function layerAddDS() {
+    let url = document.getElementById('layer-url').value;
+    let title = document.getElementById('layer-title').value;
+    if (title.length == 0) title = OAF.collectionName(url);
+
+    let lyr = addLayerDS(title, url);
     uiLayerCreate(lyr);
     layerLoad(lyr, true);
 }
@@ -181,7 +195,7 @@ btnLayerUpdate.onclick = function() {
 }
 
 function layerLoad(lyr, doZoom) {
-    var prom = MAP.layerLoad(lyr, doZoom);
+    var prom = lyr.load(doZoom);
     prom.done(function() {
         uiLayerError(lyr, false);
     });
@@ -212,7 +226,6 @@ function onChangeTransform(select, targetID) {
 var LAYER_NAME_PREF = 'lyr-name-' ;
 
 function uiLayerCreate(lyr, isVT) {
-    var self = this;
 
     var listID = '#layer-list';
     var $div = $('<div class="layer-list-item">');
@@ -268,7 +281,7 @@ function uiLayerCreate(lyr, isVT) {
         var $toolZoom = $('<span>').addClass('layer-tool').appendTo($tools)
             .text('Z')
             .attr('title', 'Zoom to Layer')
-            .click( doZoom );
+            .click( () => lyr.zoom() );
         var $toolReload = $('<span>').addClass('layer-tool').appendTo( $tools )
             .text('R')
             .attr('title', 'Reload Layer (Shift to use bbox)')
@@ -286,9 +299,7 @@ function uiLayerCreate(lyr, isVT) {
 
     $chkVis.click(function () {
         var isVisible = $(this).is(':checked');
-        //lyr.visibility = isVisible;
-        MAP.layerSetVisible(lyr, isVisible);
-        //self.clearTime();
+        lyr.setVisible(isVisible);
     } )
     /*
     $toolUp.click(function() {
@@ -301,7 +312,7 @@ function uiLayerCreate(lyr, isVT) {
     });
     */
     $toolRemove.click(function() {
-        MAP.removeLayer(lyr);
+        lyr.remove();
         $div.remove();
     })
     function doReload(evt) {
@@ -311,14 +322,11 @@ function uiLayerCreate(lyr, isVT) {
         }
         layerLoad(lyr, false);
     }
-    function doZoom() {
-        MAP.layerZoom(lyr);
-    }
     function doInfo() {
         uiLayerInfo(lyr);
     }
     $toolColor.change(function() {
-        MAP.layerColor( lyr, $toolColor.val() );
+        lyr.setColor( $toolColor.val() );
     });
 }
 $('.panel-closer').click(function() {

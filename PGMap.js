@@ -47,113 +47,19 @@ readCollections(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-addLayer(title, url, params, genURLFn = null) {
-	var clrDefault = chooseColor(this.layerCounter);
-	let src = new ol.source.Vector();
-    var olLayer = new ol.layer.Vector({
-        source: src,
-        style: createStyleFunction(clrDefault)
-    });
-	this.map.addLayer(olLayer);
-	this.layerCounter++;
-	let lyr = {
-		id: this.layerCounter,
-		title: title,
-		url: url,
-		parameters: params,
-		genURLFn: genURLFn,
-		color: clrDefault,
-		olLayer: olLayer,
-		numFeatures: 0,
-		loadTime: 0,
-		textStatus: ''
-	}
+addLayerFC(title, host, name, params) {
+	return this._addLayer( new LayerFC(this, title, host, name, params) );
+}
+addLayerDS(title, url) {
+	return this._addLayer( new LayerDS(this, title, url) );
+}
+addLayerVT(title, url) {
+	return this._addLayer( new LayerVT(this, title, url));
+}
+_addLayer(lyr) {
+	let ollyr = lyr.createOLLayer();
+	this.map.addLayer( ollyr );
 	return lyr;
-}
-addLayerVT(title, urlLayer) {
-	var clrDefault = chooseColor(this.layerCounter);
-	var url = urlLayer + '/{z}/{x}/{y}.pbf';
-	const olLayer= new ol.layer.VectorTile({
-		className: "dataLayer", // needed to avoid base labels disappearing?
-		style: createStyleFunction(clrDefault),
-		//declutter: true,
-		minZoom: 5,
-		source: new ol.source.VectorTile({
-			format: new ol.format.MVT(),
-			url: url,
-			minZoom: 5,
-			maxZoom: 16
-		})
-	});
-	this.map.addLayer(olLayer);
-	this.layerCounter++;
-	let lyr = {
-		id: this.layerCounter,
-		title: title,
-		url: url,
-		color: clrDefault,
-		olLayer: olLayer,
-		loadTime: 0,
-		textStatus: ''
-	}
-	return lyr;
-}
-layerLoad(lyr, doZoom) {
-	let self = this;
-
-	let src = lyr.olLayer.getSource();
-	src.clear();
-
-	let urlReq = lyr.url;
-	if (lyr.genURLFn) {
-		urlReq = lyr.genURLFn(lyr.url, lyr.parameters);
-	}
-	/* ---------  // DEVELOPMENT ONLY
-	layerSetFeaturesMock(lyr);
-	this.layerZoom(lyr);
-	return;
-*/
-	var timeStart = Date.now();
-	var prom = $.when(
-		$.getJSON( urlReq, {})
-		.done (function(data, textStatus, jqXHR) {
-			lyr.statusMsg = textStatus;
-			lyr.statusCode = jqXHR.status;
-			var timeEnd = Date.now();
-			lyr.loadTime = timeEnd - timeStart;
-			var features = (new ol.format.GeoJSON()).readFeatures(data, {
-				featureProjection: 'EPSG:3857'
-			} );
-			lyr.numFeatures = features.length;
-			src.addFeatures(features);
-			if (doZoom) {
-				self.layerZoom(lyr);
-			}
-		})
-		.fail(function(jqXHR, textStatus) {
-			lyr.statusMsg = textStatus;
-			lyr.statusCode = jqXHR.status;
-		  	console.log("geojson error in "+ lyr.url);
-		})
-	  );
-	  return prom;
-}
-layerZoom(lyr) {
-	let olmap = this.map;
-	let lyrext = lyr.olLayer.getSource().getExtent();
-	let sz = Math.max( ol.extent.getWidth(lyrext), ol.extent.getHeight(lyrext) );
-	let ext = ol.extent.buffer( lyrext,  0.2 * sz);
-    olmap.getView().fit( ext, olmap.getSize());
-}
-removeLayer(lyr) {
-	this.map.removeLayer(lyr.olLayer);
-}
-layerSetVisible(lyr, isVis) {
-	lyr.olLayer.setVisible(isVis);
-}
-layerColor(lyr, clr) {
-	//console.log(clr);
-	lyr.olLayer.setStyle( createStyleFunction( clr ));
 }
 installMousePos (id) {
     var map = this.map;
