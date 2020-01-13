@@ -9,13 +9,11 @@ function addLayer(name, url, options) {
     return lyr;
 }
 function addLayerVT(name, url, options) {
-    let lyr = MAP.addLayerVT(name, url, options, OAF.urlWithParams );
+    let lyr = MAP.addLayerVT(name, url, options);
     return lyr;
 }
 function addLayerDataset(name, url) {
-    let lyr = MAP.layerAdd(name, url, null, function(url) {
-        return url
-    });
+    let lyr = MAP.addLayer(name, url);
     return lyr;
 }
 OAF = {

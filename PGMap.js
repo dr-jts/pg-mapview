@@ -47,7 +47,7 @@ readCollections(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-addLayer(title, url, params, genURLFn) {
+addLayer(title, url, params, genURLFn = null) {
 	var clrDefault = chooseColor(this.layerCounter);
 	let src = new ol.source.Vector();
     var olLayer = new ol.layer.Vector({
@@ -104,7 +104,10 @@ layerLoad(lyr, doZoom) {
 	let src = lyr.olLayer.getSource();
 	src.clear();
 
-	var urlReq = lyr.genURLFn(lyr.url, lyr.parameters);
+	let urlReq = lyr.url;
+	if (lyr.genURLFn) {
+		urlReq = lyr.genURLFn(lyr.url, lyr.parameters);
+	}
 	/* ---------  // DEVELOPMENT ONLY
 	layerSetFeaturesMock(lyr);
 	this.layerZoom(lyr);
