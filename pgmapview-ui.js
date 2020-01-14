@@ -52,19 +52,19 @@ function uiShowLayerAdd() {
     $('#btn-layer-add').show();
     $('#btn-layer-update').hide();
 
+    //--- show no tab selected on Add...
     $('.layer-panel-tabs').show();
-    layerTabShow('layer-tab-fc');
-
-    $('#tbl-fc-url').show();
+    $('.radio-layer-tab').prop('checked', false);
+    layerTabShow();
 
     //----- reset Layer panel
+    $('#tbl-fc-url').show();
     document.getElementById('layer-url').value = '';
     document.getElementById('layer-title').value = '';
     document.getElementById('layer-limit').value = '';
     document.getElementById('layer-bbox').value = '';
     document.getElementById('layer-precision').value = '';
     document.getElementById('layer-transform').value = '';
-
     document.getElementById('sel-transform-function').selectedIndex = 0;
 
     panelShow('panel-layer-add', true);

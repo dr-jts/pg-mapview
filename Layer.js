@@ -1,8 +1,8 @@
 class Layer {  // abstract
     constructor(map, title, url, params = null) {
         let id = Layer.idCounter++;
-        let clrDefault =
 
+        if (! title) title = "Layer " + id;
         this.pgmap = map;
         this.idCounter++;
         this.title = title;
@@ -148,11 +148,12 @@ OAF = {
         let  newUrl = `${url}${delim}${name}=${value}`;
         return newUrl;
     },
-    // extract layer name from an OAF collection url
+    // extract layer name from an OAF collection url, or null
     collectionName(url) {
         var rx = /collections\/(.*)\/items/g;
-        var arr = rx.exec(url);
-        var title = arr[1];
+        var matches = rx.exec(url);
+        if (! matches || matches.length <= 0) return null;
+        var title = matches[1];
         return title;
     }
 }
