@@ -8,7 +8,11 @@ class Layer {  // abstract
         this.title = title;
         this.url = url
         this.parameters = params
-        this.color = chooseColor(id);
+        this.style = {
+            color: chooseColor(id),
+            isLabelled: false,
+            labelProp: ''
+        };
 
         // init by subclasses
         this.olLayer = null;
@@ -37,8 +41,19 @@ class Layer {  // abstract
     }
     setColor(clr) {
         //console.log(clr);
-        this.color = clr;
-        this.olLayer.setStyle( createStyleFunction( clr ));
+        this.style.color = clr;
+        this._initStyle();
+    }
+    setLabel(labelProp, isLabelled) {
+        //console.log(clr);
+        this.style.labelProp = labelProp;
+        this.style.isLabelled = isLabelled;
+        this._initStyle();
+    }
+    _initStyle() {
+        let style = createStyleFunction( this.style.color,
+            this.style.isLabelled ? this.style.labelProp : null)
+        this.olLayer.setStyle( style );
     }
 }
 Layer.idCounter = 0;
@@ -51,7 +66,8 @@ class LayerDS extends Layer {
         let src = new ol.source.Vector();
         let ollyr = new ol.layer.Vector({
             source: src,
-            style: createStyleFunction(this.color)
+            //declutter: true,
+            style: createStyleFunction(this.style.color)
         });
         this.olLayer = ollyr;
         return ollyr;
@@ -111,8 +127,8 @@ class LayerVT extends Layer {
         let urlTile = this.url + '/{z}/{x}/{y}.pbf';
         let olLayer= new ol.layer.VectorTile({
             className: "dataLayer", // needed to avoid base labels disappearing?
-            style: createStyleFunction( this.color ),
-            //declutter: true,
+            style: createStyleFunction( this.style.color ),
+            declutter: true,
             minZoom: 5,
             source: new ol.source.VectorTile({
                 format: new ol.format.MVT(),

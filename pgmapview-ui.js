@@ -2,13 +2,17 @@ document.getElementById('btn-layer-add-show').onclick = function() {
     uiShowLayerAdd();
 }
 document.getElementById('btn-layer-add-cancel').onclick = function() {
-    panelShow('panel-layer-add', false);
+    panelsHide();
 }
+
+$('.panel-closer').click(function() {  panelsHide(); });
+$('.btn-panel-cancel').click(function() {  panelsHide(); });
 
 document.getElementById('btn-layer-bbox-use-map').onclick = function() {
     var bboxStr = MAP.extentStr(4);
     document.getElementById('layer-bbox').value = bboxStr;
 }
+
 
 document.getElementById('radio-layer-tab-ds').onclick = function() {
     layerTabShow('layer-tab-ds');
@@ -223,6 +227,37 @@ function onChangeTransform(select, targetID) {
     // set select back to prompt
     select.selectedIndex = 0;
 }
+//===============================
+var CURR_LYR;
+var $CURR_LYR_CTL;
+
+$('.layer-color').click(function() {  panelShow('style-panel', true); });
+document.getElementById('btn-style-update').onclick = function() {
+    uiStyleUpdate();
+}
+
+function uiStyleShow(lyr, $lyrCtl) {
+    CURR_LYR = lyr;
+    $CURR_LYR_CTL = $lyrCtl;
+    panelShow('style-panel', true);
+    document.getElementById('style-color').value = lyr.style.color;
+    document.getElementById('style-color').checked = lyr.style.isLabelled;
+    document.getElementById('style-label').value = lyr.style.labelProp;
+}
+function uiStyleUpdate() {
+    panelsHide();
+    var clr = document.getElementById('style-color').value;
+    CURR_LYR.setColor(clr);
+    $CURR_LYR_CTL.css('background-color', clr);
+    var isLabel = document.getElementById('chk-style-label').checked;
+    var labelProp = document.getElementById('style-label').value;
+    CURR_LYR.setLabel(labelProp, isLabel);
+    /*
+    var declutter = document.getElementById('style-declutter').checked;
+    CURR_LYR.setDeclutter(declutter);
+    */
+}
+//================================
 var LAYER_NAME_PREF = 'lyr-name-' ;
 
 function uiLayerCreate(lyr, isVT) {
@@ -239,19 +274,20 @@ function uiLayerCreate(lyr, isVT) {
         .prop('checked', true)
         .appendTo( $div );
         */
-    var $toolColor= $('<input type="color">').addClass('layer-color')
+    var $toolColor = $('<button>').addClass('btn-layer-color')
         .appendTo($div)
         .attr('title', 'Set layer style')
-        .val(lyr.color);
+        .css('background-color', lyr.style.color)
+    $toolColor.click( function() { uiStyleShow(lyr, $toolColor); } );
     $('<label class="layer-name">').text(lyr.title)
         .attr('id', LAYER_NAME_PREF + lyr.id)
         .attr('title', lyr.url)
-    .appendTo($div)
+        .appendTo($div)
         .click( function() {
-			var show = ! $tools.is(':visible');
-			$('.layer-tools').hide();
-			if (show) $tools.toggle();
-		});
+            var show = ! $tools.is(':visible');
+            $('.layer-tools').hide();
+            if (show) $tools.toggle();
+        });
 
     var $tools = $('<div class="layer-tools">').appendTo($div);
 	var $toolRemove = $('<span>').addClass('layer-remove layer-tool').appendTo($tools)
@@ -325,13 +361,12 @@ function uiLayerCreate(lyr, isVT) {
     function doInfo() {
         uiLayerInfo(lyr);
     }
+    /*
     $toolColor.change(function() {
         lyr.setColor( $toolColor.val() );
     });
+    */
 }
-$('.panel-closer').click(function() {
-    panelsHide();
-});
 
 function uiLayerError(layer, isError) {
     $lyrName = $('#'+LAYER_NAME_PREF+layer.id)
@@ -399,5 +434,5 @@ function panelsHide() {
     $('.identify-panel').hide();
     $('.info-panel').hide();
     $('.layer-panel').hide();
-    $('.layervt-panel').hide();
+    $('.style-panel').hide();
 }

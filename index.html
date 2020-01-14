@@ -38,6 +38,20 @@
         <table id="identify-content"></table>
     </div>
 </div>
+<div id='style-panel' class='style-panel panel'>
+    <div style='margin-bottom: 10px;'>Layer Style</div>
+    <table id='tbl-style' style='width:100%'>
+        <tr><td class='panel-line-title'>Color</td><td><input type="color" id='style-color' class='layer-color'></td></tr>
+        <tr><td class='panel-line-title'>Label</td>
+            <td><input type="checkbox" id='chk-style-label'>
+            Property <input type="text" id='style-label' style='width:100px' value=''></td></tr>
+        <!--<tr><td class='panel-line-title'>Declutter</td><td><input type="checkbox" id='style-declutter'></td></tr>-->
+    </table>
+    <div>
+        <button id='btn-style-update'>Update</button>
+        <button id='btn-panel-cancel' class='btn-panel-cancel'>Cancel</button>
+    </div>
+</div>
 <div id='info-panel' class='info-panel panel'>
     <div class='panel-title'>Layer Info</div>
     <div class="panel-closer">x</div>
@@ -122,9 +136,9 @@
         </table>
     </div>
     <div>
-            <button id='btn-layer-add'>Add</button>
-            <button id='btn-layer-update'>Update</button>
-            <button id='btn-layer-add-cancel'>Cancel</button>
+        <button id='btn-layer-add'>Add</button>
+        <button id='btn-layer-update'>Update</button>
+        <button id='btn-layer-add-cancel'>Cancel</button>
     </div>
 </div>
 

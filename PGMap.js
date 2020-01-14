@@ -104,7 +104,8 @@ onFeatureClick(fn) {
 		fn( feature );
 	});
 }
-}
+} // PGMap
+
 function chooseColor(num) {
 	var COLORS = [
 		"#0000FF",
@@ -125,10 +126,25 @@ function chooseColor(num) {
 	];
 	return COLORS[ num % COLORS.length ];
 }
-function createStyleFunction(clr) {
+function createStyleFunction(clr, lblName) {
 	var styles = createStyles(clr);
 	return function(feature) {
-		return styles[feature.getGeometry().getType()];
+		let ftype = feature.getGeometry().getType();
+		let sty = styles[ftype];
+		if (lblName) {
+			let val = feature.get(lblName);
+			let txt = "" + val;
+			let textSpec = {
+				text: txt,
+				font: '14px sans-serif',
+				fill: new ol.style.Fill({ color: '#000000' }),
+			};
+			// offset for points and lines
+			if (ftype == 'Point') {
+				textSpec.offsetY = -12;	}
+			sty.setText( new ol.style.Text(textSpec) );
+		}
+		return sty;
 	}
 }
 function createStyles(clr) {
@@ -138,6 +154,7 @@ function createStyles(clr) {
 		fill: new ol.style.Fill({ color: clr }),
 		stroke: new ol.style.Stroke({color: clr, width: 1})
 	});
+
 	var styles = {
 		'Point': new ol.style.Style({
 			image: imageCircle

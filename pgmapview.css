@@ -78,6 +78,9 @@ button {
     font-size: 10pt;
     padding: 0px;
 }
+.style-panel {
+    position:absolute; top:60px; left: 230px; right:60px;
+}
 .layer-panel {
     position:absolute; top:60px; left: 230px; right:60px;
 }
@@ -171,10 +174,16 @@ button {
 }
 .layer-color {
     border: 0px;
-    width: 16px;
-    background-color: rgb(211, 222, 247);
+    width: 20px;
     height: 20px;
+    margin: 4px;
     outline: none;
+    background-color: #dee6f8;
+}
+.btn-layer-color {
+    width: 14px;
+    height: 14px;
+    margin: 4px;
 }
 .layer-color:hover {
     cursor: pointer;
