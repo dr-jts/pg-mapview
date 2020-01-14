@@ -53,6 +53,7 @@ document.getElementById('btn-fc-read').onclick = function() {
 }
 
 function uiShowLayerAdd() {
+    document.getElementById('layer-panel-title').innerText = 'Add Layer';
     $('#btn-layer-add').show();
     $('#btn-layer-update').hide();
 
@@ -75,10 +76,12 @@ function uiShowLayerAdd() {
 }
 
 var layerToUpdate = null;
+
 function uiShowLayerUpdate(layer) {
     layerToUpdate = layer;
     var isCollection = layer.parameters != undefined;
 
+    document.getElementById('layer-panel-title').innerText = 'Layer Settings';
     $('#btn-layer-add').hide();
     $('#btn-layer-update').show();
 

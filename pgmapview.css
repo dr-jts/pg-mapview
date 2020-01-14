@@ -71,6 +71,7 @@ button {
     font-size: 12px;
     text-align: right;
     padding-right: 6px;
+    width: 100px;
 }
 .info-panel {
     position: absolute; bottom: 30px; left: 240px; right: 20px;
