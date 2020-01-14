@@ -136,7 +136,7 @@ function createStyleFunction(clr, lblName) {
 			let txt = "" + val;
 			let textSpec = {
 				text: txt,
-				font: '14px sans-serif',
+				font: '12px sans-serif',
 				fill: new ol.style.Fill({ color: '#000000' }),
 			};
 			// offset for points and lines
