@@ -73,6 +73,7 @@ function uiShowLayerAdd() {
     document.getElementById('sel-transform-function').selectedIndex = 0;
 
     $('#layer-options').show();
+    document.getElementById('chk-heatmap').checked = true;
     document.getElementById('chk-heatmap').checked = false;
     document.getElementById('chk-cluster').checked = false;
     document.getElementById('chk-declutter').checked = false;
