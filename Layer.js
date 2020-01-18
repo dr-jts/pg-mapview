@@ -29,7 +29,7 @@ class Layer {  // abstract
         return this.pgmap.map;
     }
     zoom() {
-        let lyrext = this.olLayer.getSource().getExtent();
+        let lyrext = this._baseSource().getExtent();
         let sz = Math.max( ol.extent.getWidth(lyrext), ol.extent.getHeight(lyrext) );
         let ext = ol.extent.buffer( lyrext,  0.2 * sz);
         this.olmap().getView().fit( ext, this.olmap().getSize());
@@ -56,6 +56,14 @@ class Layer {  // abstract
             this.style.isLabelled ? this.style.labelProp : null)
         this.olLayer.setStyle( style );
     }
+    _baseSource() {
+        // if source is clustered need to dig down to data source
+        let src = this.olLayer.getSource();
+        if (src instanceof ol.source.Cluster) {
+            return src.getSource();
+        }
+        return src;
+    }
 }
 Layer.idCounter = 0;
 // A layer for a GeoJSON dataset
@@ -66,14 +74,13 @@ class LayerDS extends Layer {
     createOLLayer() {
         let src = new ol.source.Vector();
         let isHM = this.options && this.options.isHeatmap;
+        let isCL = this.options && this.options.isCluster;
         let ollyr = null;
         if (isHM) {
-            ollyr = new ol.layer.Heatmap({
-                    source: src,
-                radius: 10,
-                weight: function(feature) { return 1; },
-                //style: createStyleFunction(this.style.color)
-            });
+            ollyr = this._createHeatmapLayer(src);
+        }
+        else if (isCL) {
+            ollyr = this._createClusterLayer(src);
         }
         else {
             ollyr = new ol.layer.Vector({
@@ -85,11 +92,30 @@ class LayerDS extends Layer {
         this.olLayer = ollyr;
         return ollyr;
     }
+    _createHeatmapLayer(src) {
+        var lyr = new ol.layer.Heatmap({
+            source: src,
+            radius: 10,
+            weight: function(feature) { return 1; },
+        });
+        return lyr;
+    }
+    _createClusterLayer(src) {
+        var clusterSource = new ol.source.Cluster({
+            distance: 40,
+            source: src
+        });
+        var lyr = new ol.layer.Vector({
+            source: clusterSource,
+            style: styleCluster
+        });
+        return lyr;
+    }
     getURL() {
         return OAF.urlWithParams(this.url, this.parameters);
     }
     load(doZoom) {
-        let src = this.olLayer.getSource();
+        let src = this._baseSource();
         src.clear();
 
         let urlReq = this.getURL();

@@ -74,6 +74,7 @@ function uiShowLayerAdd() {
 
     $('#layer-options').show();
     document.getElementById('chk-heatmap').checked = false;
+    document.getElementById('chk-cluster').checked = false;
     document.getElementById('chk-declutter').checked = false;
 
     panelShow('panel-layer-add', true);
@@ -202,6 +203,7 @@ function layerParamsRead() {
 function layerOptionsRead() {
     let options = {
         isHeatmap: document.getElementById('chk-heatmap').checked,
+        isCluster: document.getElementById('chk-cluster').checked,
         isDeclutter: document.getElementById('chk-declutter').checked,
     }
     return options;
