@@ -425,6 +425,7 @@ function uiUpdateInfo(layer) {
     $('#info-count-features').text( layer.numFeatures );
     $('#info-loadtime').text( layer.loadTime/ 1000 );
     $('#info-url').text( layer.url );
+    document.getElementById('info-url').href = layer.url;
 }
 function uiIdentifyFeature( feature ) {
     if (! feature ) {
