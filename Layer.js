@@ -67,7 +67,7 @@ class Layer {  // abstract
 }
 Layer.idCounter = 0;
 // A layer for a GeoJSON dataset
-class LayerDS extends Layer {
+class LayerVector extends Layer {
     constructor(map, title, url, params = null, options = {}) {
         super(map, title, url, params, options);
     }
@@ -151,7 +151,12 @@ class LayerDS extends Layer {
           return prom;
     }
 }
-class LayerFC extends LayerDS {
+class LayerDS extends LayerVector {
+    constructor(map, title, url, options = {}) {
+        super(map, title, url, null, options);
+    }
+}
+class LayerFC extends LayerVector {
     constructor(map, title, service, name, params, options = {}) {
         super(map, title, OAF.urlItems(service, name), params, options);
         this.service = service;
