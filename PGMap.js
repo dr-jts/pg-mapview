@@ -47,14 +47,14 @@ readCollections(urlService, fnDone, fnFail) {
 	.fail(fnFail);
 	return [];
 }
-addLayerFC(title, host, name, params) {
-	return this._addLayer( new LayerFC(this, title, host, name, params) );
+addLayerFC(title, host, name, params, options) {
+	return this._addLayer( new LayerFC(this, title, host, name, params, options) );
 }
-addLayerDS(title, url) {
-	return this._addLayer( new LayerDS(this, title, url) );
+addLayerDS(title, url, options) {
+	return this._addLayer( new LayerDS(this, title, url, options) );
 }
-addLayerVT(title, url) {
-	return this._addLayer( new LayerVT(this, title, url));
+addLayerVT(title, url, options) {
+	return this._addLayer( new LayerVT(this, title, url, options));
 }
 _addLayer(lyr) {
 	let ollyr = lyr.createOLLayer();

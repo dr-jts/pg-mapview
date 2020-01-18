@@ -72,6 +72,10 @@ function uiShowLayerAdd() {
     document.getElementById('layer-transform').value = '';
     document.getElementById('sel-transform-function').selectedIndex = 0;
 
+    $('#layer-options').show();
+    document.getElementById('chk-heatmap').checked = false;
+    document.getElementById('chk-declutter').checked = false;
+
     panelShow('panel-layer-add', true);
 }
 
@@ -91,6 +95,7 @@ function uiShowLayerUpdate(layer) {
     //$('#layer-url-panel').toggle(! isCollection);
 
     $('#tbl-fc-url').hide();
+    $('#layer-options').hide();
 
     //--- populate panel from layer
     document.getElementById('layer-title').value = layer.title;
@@ -149,7 +154,10 @@ function layerAddVT() {
     if (title.length == 0) title = name;
 
     url = host + "/" + name;
-    var lyr = addLayerVT(title, url);
+
+    let options = layerOptionsRead()
+
+    var lyr = addLayerVT(title, url, options);
 
     uiLayerCreate(lyr, true);
 }
@@ -160,7 +168,10 @@ function layerAddFC() {
 
     let service = document.getElementById('layer-host').value;
     let params = layerParamsRead();
-    let lyr = addLayerFC(title, service, name, params);
+
+    let options = layerOptionsRead()
+
+    let lyr = addLayerFC(title, service, name, params, options);
     uiLayerCreate(lyr);
     layerLoad(lyr, true);
 }
@@ -169,7 +180,9 @@ function layerAddDS() {
     let title = document.getElementById('layer-title').value;
     if (title.length == 0) title = OAF.collectionName(url);
 
-    let lyr = addLayerDS(title, url);
+    let options = layerOptionsRead()
+
+    let lyr = addLayerDS(title, url, options);
     uiLayerCreate(lyr);
     layerLoad(lyr, true);
 }
@@ -186,7 +199,13 @@ function layerParamsRead() {
     };
     return params;
 }
-
+function layerOptionsRead() {
+    let options = {
+        isHeatmap: document.getElementById('chk-heatmap').checked,
+        isDeclutter: document.getElementById('chk-declutter').checked,
+    }
+    return options;
+}
 var btnLayerUpdate = document.getElementById('btn-layer-update');
 btnLayerUpdate.onclick = function() {
     panelShow('panel-layer-add', false);

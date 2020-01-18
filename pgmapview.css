@@ -73,6 +73,10 @@ button {
     padding-right: 6px;
     width: 100px;
 }
+.panel-line-controls {
+    font-size: 12px;
+    padding-right: 6px;
+}
 .info-panel {
     position: absolute; bottom: 30px; left: 240px; right: 20px;
     height: 160px;

@@ -1,5 +1,5 @@
 class Layer {  // abstract
-    constructor(map, title, url, params = null) {
+    constructor(map, title, url, params = null, options = {}) {
         let id = Layer.idCounter++;
 
         if (! title) title = "Layer " + id;
@@ -13,6 +13,7 @@ class Layer {  // abstract
             isLabelled: false,
             labelProp: ''
         };
+        this.options = options;
 
         // init by subclasses
         this.olLayer = null;
@@ -59,16 +60,28 @@ class Layer {  // abstract
 Layer.idCounter = 0;
 // A layer for a GeoJSON dataset
 class LayerDS extends Layer {
-    constructor(map, title, url, params = null) {
-        super(map, title, url, params);
+    constructor(map, title, url, params = null, options = {}) {
+        super(map, title, url, params, options);
     }
     createOLLayer() {
         let src = new ol.source.Vector();
-        let ollyr = new ol.layer.Vector({
-            source: src,
-            //declutter: true,
-            style: createStyleFunction(this.style.color)
-        });
+        let isHM = this.options && this.options.isHeatmap;
+        let ollyr = null;
+        if (isHM) {
+            ollyr = new ol.layer.Heatmap({
+                    source: src,
+                radius: 10,
+                weight: function(feature) { return 1; },
+                //style: createStyleFunction(this.style.color)
+            });
+        }
+        else {
+            ollyr = new ol.layer.Vector({
+                source: src,
+                declutter: this.options.isDeclutter,
+                style: createStyleFunction(this.style.color)
+            });
+        }
         this.olLayer = ollyr;
         return ollyr;
     }
@@ -113,22 +126,22 @@ class LayerDS extends Layer {
     }
 }
 class LayerFC extends LayerDS {
-    constructor(map, title, service, name, params) {
-        super(map, title, OAF.urlItems(service, name), params);
+    constructor(map, title, service, name, params, options = {}) {
+        super(map, title, OAF.urlItems(service, name), params, options);
         this.service = service;
         this.name = name;
     }
 }
 class LayerVT extends Layer {
     constructor(map, title, url, options = null) {
-        super(map, title, url);
+        super(map, title, url, null, options);
     }
     createOLLayer() {
         let urlTile = this.url + '/{z}/{x}/{y}.pbf';
         let olLayer= new ol.layer.VectorTile({
             className: "dataLayer", // needed to avoid base labels disappearing?
             style: createStyleFunction( this.style.color ),
-            declutter: true,
+            declutter: this.options.isDeclutter,
             minZoom: 5,
             source: new ol.source.VectorTile({
                 format: new ol.format.MVT(),
