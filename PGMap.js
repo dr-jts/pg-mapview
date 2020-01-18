@@ -226,11 +226,20 @@ function styleCluster(feature) {
 	if (size == 1) return STYLE_SINGLE;
 	var style = STYLE_CACHE[size];
 	if (!style) {
+		let fill = '#3399CC';
+		let radius = 10;
+		if (size >= 10) {
+			fill = '#2288bb';
+		}
+		if (size >= 100) {
+			fill = '#1177aa';
+			radius = 13;
+		}
 		style = new ol.style.Style({
 			image: new ol.style.Circle({
-				radius: 10,
+				radius: radius,
 				stroke: new ol.style.Stroke({ color: '#fff'	}),
-				fill: new ol.style.Fill({ color: '#3399CC' })
+				fill: new ol.style.Fill({ color: fill })
 			}),
 			text: new ol.style.Text({
 				text: size.toString(),
