@@ -31,8 +31,26 @@ class Layer {  // abstract
     getURL() {
         return this.url;
     }
+    move(delta) {
+        let layerColl = this.olmap().getLayers();
+        let layerArr = layerColl.getArray();
+        let index = layerArr.indexOf(this.olLayer);
+
+        if (delta == 0) return; // idiot-proofing
+        if (delta > 0) { // move up
+            var indexNew = index + 1;
+        }
+        else { // move down
+            indexNew = index - 1;
+        }
+        if (indexNew == 0 || indexNew >= layerArr.length)
+            return;
+        layerColl.removeAt(index);
+        layerColl.insertAt(indexNew, this.olLayer);
+        //this.map.render();
+    }
     zoom() {
-        let lyrext = this._baseSource().getExtent();
+       let lyrext = this._baseSource().getExtent();
         let sz = Math.max( ol.extent.getWidth(lyrext), ol.extent.getHeight(lyrext) );
         let ext = ol.extent.buffer( lyrext,  0.2 * sz);
         this.olmap().getView().fit( ext, this.olmap().getSize());

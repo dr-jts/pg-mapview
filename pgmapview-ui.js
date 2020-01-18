@@ -326,22 +326,28 @@ function uiLayerCreate(lyr, isVT) {
 	var $toolRemove = $('<span>').addClass('layer-remove layer-tool').appendTo($tools)
 		.text('x')
         .attr('title', 'Remove Layer');
-        /*
     var $toolUp = $('<span>').addClass('layer-up layer-tool').appendTo( $tools )
 		.text('^')
-		.attr('title', 'Move Layer up');
+		.attr('title', 'Move Layer up')
+		.click(function() {
+			lyr.move(1);
+			var $prev = $div.prev();
+			if (! $prev.length) return;
+			$div.detach();
+			$prev.before($div);
+            //$tools.hide();
+        });
     var $toolDown = $('<span>').addClass('layer-down layer-tool').appendTo( $tools )
 		.text('v')
 		.attr('title', 'Move Layer down')
 		.click(function() {
-			//self.moveLayer(lyr, 1);
+			lyr.move(-1);
 			var $nxt = $div.next();
 			if (! $nxt.length) return;
 			$div.detach();
 			$nxt.after($div);
 			//$tools.hide();
         });
-        */
     if (! isVT) {
         var $toolInfo = $('<span>').addClass('layer-tool').appendTo($tools)
             .text('i')
