@@ -100,12 +100,24 @@ onFeatureClick(fn) {
 		if (features && features.length > 0) {
 			feature = features[0];
 		}
+		feature = getBaseFeature( feature );
 		// call even if feature not found, to allow updating UI
 		fn( feature );
 	});
 }
 } // PGMap
 
+function getBaseFeature(feature) {
+	if (! feature) return null;
+	let props = feature.getProperties();
+	let isCluster = props.hasOwnProperty('features');
+	if (! isCluster) return feature;
+	let clusterFeatures = props['features'];
+	if (clusterFeatures.length == 1) {
+		return clusterFeatures[0];
+	}
+	return null;
+}
 function chooseColor(num) {
 	var COLORS = [
 		"#0000FF",
