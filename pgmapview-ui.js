@@ -424,8 +424,9 @@ function uiUpdateInfo(layer) {
     $('#info-status').text( layer.statusCode + " - " + layer.statusMsg);
     $('#info-count-features').text( layer.numFeatures );
     $('#info-loadtime').text( layer.loadTime/ 1000 );
-    $('#info-url').text( layer.url );
-    document.getElementById('info-url').href = layer.url;
+    let url = layer.getURL()
+    $('#info-url').text( url );
+    document.getElementById('info-url').href = url;
 }
 function uiIdentifyFeature( feature ) {
     if (! feature ) {

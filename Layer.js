@@ -28,6 +28,9 @@ class Layer {  // abstract
     olmap() {
         return this.pgmap.map;
     }
+    getURL() {
+        return this.url;
+    }
     zoom() {
         let lyrext = this._baseSource().getExtent();
         let sz = Math.max( ol.extent.getWidth(lyrext), ol.extent.getHeight(lyrext) );
