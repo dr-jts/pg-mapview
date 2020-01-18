@@ -215,8 +215,15 @@ function createStyles(clr) {
 	return styles;
 }
 STYLE_CACHE = {};
+STYLE_SINGLE = new ol.style.Style({
+	image: new ol.style.Circle({
+		radius: 5,
+		fill: new ol.style.Fill({ color: '#0000ff' })
+	})
+});
 function styleCluster(feature) {
 	var size = feature.get('features').length;
+	if (size == 1) return STYLE_SINGLE;
 	var style = STYLE_CACHE[size];
 	if (!style) {
 		style = new ol.style.Style({
