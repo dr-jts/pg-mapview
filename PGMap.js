@@ -227,13 +227,14 @@ function styleCluster(feature) {
 	var style = STYLE_CACHE[size];
 	if (!style) {
 		let fill = '#3399CC';
-		let radius = 10;
+		let radius = 8;
 		if (size >= 10) {
-			fill = '#2288bb';
+			fill = '#1177aa';
+			radius = 11;
 		}
 		if (size >= 100) {
-			fill = '#1177aa';
-			radius = 13;
+			fill = '#006699';
+			radius = 15;
 		}
 		style = new ol.style.Style({
 			image: new ol.style.Circle({
