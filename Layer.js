@@ -37,9 +37,6 @@ class Layer {  // abstract
     remove() {
         this.olmap().removeLayer(this.olLayer);
     }
-    setVisible(isVis) {
-        this.olLayer.setVisible(isVis);
-    }
     setColor(clr) {
         //console.log(clr);
         this.style.color = clr;
@@ -50,6 +47,12 @@ class Layer {  // abstract
         this.style.labelProp = labelProp;
         this.style.isLabelled = isLabelled;
         this._initStyle();
+    }
+    setTitle(title) {
+        this.title = title;
+    }
+    setVisible(isVis) {
+        this.olLayer.setVisible(isVis);
     }
     _initStyle() {
         let style = createStyleFunction( this.style.color,
