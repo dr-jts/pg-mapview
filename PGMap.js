@@ -136,12 +136,12 @@ function createStyleFunction(clr, lblName) {
 			let txt = "" + val;
 			let textSpec = {
 				text: txt,
-				font: '12px sans-serif',
-				fill: new ol.style.Fill({ color: '#000000' }),
+				font: '14px sans-serif',
+				fill: new ol.style.Fill({ color: clr }),
 			};
 			// offset for points and lines
 			if (ftype == 'Point') {
-				textSpec.offsetY = -12;	}
+				textSpec.offsetY = -14;	}
 			sty.setText( new ol.style.Text(textSpec) );
 		}
 		return sty;
