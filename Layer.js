@@ -80,6 +80,8 @@ class Layer {  // abstract
         }
         if (! ollyrNew) return;
         this._setOLLayer(ollyrNew);
+        // must re-init style since
+        //this._initStyle();
         this.renderType = renderType;
     }
     // subclasses override render types they support
@@ -117,9 +119,14 @@ class Layer {  // abstract
         layerColl.setAt(index, ollyrNew);
         this.olLayer = ollyrNew;
     }
+    _createStyleFunction() {
+        return createStyleFunction(
+            this.style.color,
+            this.style.isLabelled ? this.style.labelProp : null
+        );
+    }
     _initStyle() {
-        let style = createStyleFunction( this.style.color,
-            this.style.isLabelled ? this.style.labelProp : null)
+        let style = this._createStyleFunction();
         this.olLayer.setStyle( style );
     }
     _baseSource() {
@@ -155,7 +162,7 @@ class LayerVector extends Layer {
         var lyr =new ol.layer.Vector({
             source: src,
             declutter: isDeclutter,
-            style: createStyleFunction(this.style.color)
+            style: this._createStyleFunction()
         });
         return lyr;
     }
@@ -250,7 +257,7 @@ class LayerVT extends Layer {
     _createBasicLayer(src, isDeclutter = false) {
         let olLayer = new ol.layer.VectorTile({
             className: "dataLayer", // needed to avoid base labels disappearing?
-            style: createStyleFunction( this.style.color ),
+            style: this._createStyleFunction(),
             declutter: isDeclutter,
             minZoom: 5,
             source: src
