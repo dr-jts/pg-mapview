@@ -46,6 +46,15 @@
             <td><input type="checkbox" id='chk-style-label'>
             Property <input type="text" id='style-label' style='width:100px' value=''></td></tr>
         <!--<tr><td class='panel-line-title'>Declutter</td><td><input type="checkbox" id='style-declutter'></td></tr>-->
+        <tr>
+            <td class='panel-line-title' >Display Effect</td>
+            <td class='panel-line-controls'>
+                <input type="radio" name='radio-render' id='chk-none'> None
+                <input type="radio" name='radio-render' id='chk-declutter'> Declutter
+                <input type="radio" name='radio-render' id='chk-cluster'> Cluster
+                <input type="radio" name='radio-render' id='chk-heatmap'> Heatmap
+            </td>
+        </tr>
     </table>
     <div style='margin: 8px 0px 8px 0px;'><span class='panel-line-title'>Title</span> <input type="text" id='style-title' style='width:90%;'></div>
     <div>
@@ -137,19 +146,6 @@
         </table>
     </div>
     <div style='margin: 8px 0px 8px 0px;'><span class='panel-line-title'>Title</span> <input type="text" id='layer-title' style='width:90%;'></div>
-    <div id='layer-options'>
-        <table style='width:100%'>
-        <tr>
-            <td class='panel-group-title' >Display Effect</td>
-            <td class='panel-line-controls'>
-                <input type="radio" id='chk-none'> None
-                <input type="radio" id='chk-heatmap'> Heatmap
-                <input type="radio" id='chk-cluster'> Cluster
-                <input type="radio" id='chk-declutter'> Declutter
-            </td>
-        </tr>
-        </table>
-   </div>
     <div>
         <button id='btn-layer-add'>Add</button>
         <button id='btn-layer-update'>Update</button>

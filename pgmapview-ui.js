@@ -72,12 +72,6 @@ function uiShowLayerAdd() {
     document.getElementById('layer-transform').value = '';
     document.getElementById('sel-transform-function').selectedIndex = 0;
 
-    $('#layer-options').show();
-    document.getElementById('chk-heatmap').checked = true;
-    document.getElementById('chk-heatmap').checked = false;
-    document.getElementById('chk-cluster').checked = false;
-    document.getElementById('chk-declutter').checked = false;
-
     panelShow('panel-layer-add', true);
 }
 
@@ -97,7 +91,6 @@ function uiShowLayerUpdate(layer) {
     //$('#layer-url-panel').toggle(! isCollection);
 
     $('#tbl-fc-url').hide();
-    $('#layer-options').hide();
 
     //--- populate panel from layer
     document.getElementById('layer-title').value = layer.title;
@@ -203,9 +196,6 @@ function layerParamsRead() {
 }
 function layerOptionsRead() {
     let options = {
-        isHeatmap: document.getElementById('chk-heatmap').checked,
-        isCluster: document.getElementById('chk-cluster').checked,
-        isDeclutter: document.getElementById('chk-declutter').checked,
     }
     return options;
 }
@@ -272,8 +262,15 @@ function uiStyleShow(lyr, $lyrCtl, $lyrTitle) {
     document.getElementById('style-color').checked = lyr.style.isLabelled;
     document.getElementById('style-label').value = lyr.style.labelProp;
     document.getElementById('style-title').value = lyr.title;
+
+    document.getElementById('chk-none').checked = false;
+    document.getElementById('chk-heatmap').checked = false;
+    document.getElementById('chk-cluster').checked = false;
+    document.getElementById('chk-declutter').checked = false;
+
 }
 function uiStyleUpdate() {
+    // TODO: set all style options in same call?
     panelsHide();
     let clr = document.getElementById('style-color').value;
     CURR_LYR.setColor(clr);
@@ -281,14 +278,23 @@ function uiStyleUpdate() {
     let isLabel = document.getElementById('chk-style-label').checked;
     let labelProp = document.getElementById('style-label').value;
     CURR_LYR.setLabel(labelProp, isLabel);
+
+    if (document.getElementById('chk-none').checked) {
+        CURR_LYR.setRender(Layer.RENDER.NORMAL);
+    }
+    else if (document.getElementById('chk-heatmap').checked) {
+        CURR_LYR.setRender(Layer.RENDER.HEATMAP);
+    }
+    else if (document.getElementById('chk-cluster').checked) {
+        CURR_LYR.setRender(Layer.RENDER.CLUSTER);
+    }
+    else if (document.getElementById('chk-declutter').checked) {
+        CURR_LYR.setRender(Layer.RENDER.DECLUTTER);
+    }
+
     let title = document.getElementById('style-title').value;
     CURR_LYR.setTitle(title);
     $CURR_LYR_TITLE.text(title);
-
-    /*
-    var declutter = document.getElementById('style-declutter').checked;
-    CURR_LYR.setDeclutter(declutter);
-    */
 }
 //================================
 var LAYER_NAME_PREF = 'lyr-name-' ;

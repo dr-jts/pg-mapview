@@ -13,6 +13,7 @@ class Layer {  // abstract
             isLabelled: false,
             labelProp: ''
         };
+        this.renderType = Layer.RENDER.NORMAL;
         this.options = options;
 
         // init by subclasses
@@ -47,10 +48,9 @@ class Layer {  // abstract
             return;
         layerColl.removeAt(index);
         layerColl.insertAt(indexNew, this.olLayer);
-        //this.map.render();
     }
     zoom() {
-       let lyrext = this._baseSource().getExtent();
+        let lyrext = this._baseSource().getExtent();
         let sz = Math.max( ol.extent.getWidth(lyrext), ol.extent.getHeight(lyrext) );
         let ext = ol.extent.buffer( lyrext,  0.2 * sz);
         this.olmap().getView().fit( ext, this.olmap().getSize());
@@ -58,6 +58,39 @@ class Layer {  // abstract
     remove() {
         this.olmap().removeLayer(this.olLayer);
     }
+
+    setRender(renderType = Layer.RENDER.NORMAL) {
+        // do not change if not needed
+        if (this.renderType == renderType) return;
+        let src = this._baseSource();
+        let ollyrNew = null;
+        switch (renderType) {
+        case Layer.RENDER.NORMAL:
+                ollyrNew = this._createBasicLayer(src, false);
+                break;
+        case Layer.RENDER.DECLUTTER:
+                ollyrNew = this._createBasicLayer(src, true);
+                break;
+        case Layer.RENDER.CLUSTER:
+            ollyrNew = this._createClusterLayer(src);
+            break;
+        case Layer.RENDER.HEATMAP:
+            ollyrNew = this._createHeatmapLayer(src);
+            break;
+        }
+        if (! ollyrNew) return;
+        this._setOLLayer(ollyrNew);
+        this.renderType = renderType;
+    }
+    // subclasses override render types they support
+    // _createBasicLayer must be provided
+    _createBasicLayer(src, isDeclutter = false) {
+        console.log('ERROR - Layer does not provide _createBasicLayer');
+        return null;
+    }
+    _createHeatmapLayer(src) {  return null;  }
+    _createClusterLayer(src) {  return null;  }
+
     setColor(clr) {
         //console.log(clr);
         this.style.color = clr;
@@ -75,6 +108,15 @@ class Layer {  // abstract
     setVisible(isVis) {
         this.olLayer.setVisible(isVis);
     }
+    _setOLLayer(ollyrNew) {
+        // allows layer conversion methods to return null if not possible
+        if (! ollyrNew) return;
+        let layerColl = this.olmap().getLayers();
+        let layerArr = layerColl.getArray();
+        let index = layerArr.indexOf(this.olLayer);
+        layerColl.setAt(index, ollyrNew);
+        this.olLayer = ollyrNew;
+    }
     _initStyle() {
         let style = createStyleFunction( this.style.color,
             this.style.isLabelled ? this.style.labelProp : null)
@@ -89,7 +131,15 @@ class Layer {  // abstract
         return src;
     }
 }
+// used for UI layer ID
 Layer.idCounter = 0;
+Layer.RENDER = {
+    NORMAL: 1,
+    DECLUTTER: 2,
+    CLUSTER: 3,
+    HEATMAP: 4
+};
+
 // A layer for a GeoJSON dataset
 class LayerVector extends Layer {
     constructor(map, title, url, params = null, options = {}) {
@@ -97,24 +147,17 @@ class LayerVector extends Layer {
     }
     createOLLayer() {
         let src = new ol.source.Vector();
-        let isHM = this.options && this.options.isHeatmap;
-        let isCL = this.options && this.options.isCluster;
-        let ollyr = null;
-        if (isHM) {
-            ollyr = this._createHeatmapLayer(src);
-        }
-        else if (isCL) {
-            ollyr = this._createClusterLayer(src);
-        }
-        else {
-            ollyr = new ol.layer.Vector({
-                source: src,
-                declutter: this.options.isDeclutter,
-                style: createStyleFunction(this.style.color)
-            });
-        }
+        let ollyr = this._createBasicLayer(src);
         this.olLayer = ollyr;
         return ollyr;
+    }
+    _createBasicLayer(src, isDeclutter = false) {
+        var lyr =new ol.layer.Vector({
+            source: src,
+            declutter: isDeclutter,
+            style: createStyleFunction(this.style.color)
+        });
+        return lyr;
     }
     _createHeatmapLayer(src) {
         var lyr = new ol.layer.Heatmap({
@@ -138,6 +181,7 @@ class LayerVector extends Layer {
     getURL() {
         return OAF.urlWithParams(this.url, this.parameters);
     }
+
     load(doZoom) {
         let src = this._baseSource();
         src.clear();
@@ -193,25 +237,32 @@ class LayerVT extends Layer {
     }
     createOLLayer() {
         let urlTile = this.url + '/{z}/{x}/{y}.pbf';
-        let olLayer= new ol.layer.VectorTile({
+        let src = new ol.source.VectorTile({
+            format: new ol.format.MVT(),
+            url: urlTile,
+            minZoom: 5,
+            maxZoom: 16
+        })
+        let ollyr = this._createBasicLayer(src);
+        this.olLayer = ollyr;
+        return ollyr;
+    }
+    _createBasicLayer(src, isDeclutter = false) {
+        let olLayer = new ol.layer.VectorTile({
             className: "dataLayer", // needed to avoid base labels disappearing?
             style: createStyleFunction( this.style.color ),
-            declutter: this.options.isDeclutter,
+            declutter: isDeclutter,
             minZoom: 5,
-            source: new ol.source.VectorTile({
-                format: new ol.format.MVT(),
-                url: urlTile,
-                minZoom: 5,
-                maxZoom: 16
-            })
+            source: src
         });
-        this.olLayer = olLayer;
         return olLayer;
     }
     getURL() {
         return OAF.urlWithParams(this.url, this.parameters);
     }
 }
+
+
 OAF = {
     urlItems(host, name) {
         var url = `${host}/collections/${name}/items`;
