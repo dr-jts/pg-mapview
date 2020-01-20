@@ -280,7 +280,7 @@ function uiStyleUpdate() {
     CURR_LYR.setLabel(labelProp, isLabel);
 
     if (document.getElementById('chk-none').checked) {
-        CURR_LYR.setRender(Layer.RENDER.NORMAL);
+        CURR_LYR.setRender(Layer.RENDER.PLAIN);
     }
     else if (document.getElementById('chk-heatmap').checked) {
         CURR_LYR.setRender(Layer.RENDER.HEATMAP);
@@ -295,7 +295,20 @@ function uiStyleUpdate() {
     let title = document.getElementById('style-title').value;
     CURR_LYR.setTitle(title);
     $CURR_LYR_TITLE.text(title);
+    uiLayerSwatchStyle(CURR_LYR, $CURR_LYR_CTL);
 }
+function uiLayerSwatchStyle(lyr, ctl) {
+    ctl.removeClass('btn-layer-color-heatmap');
+    ctl.removeClass('btn-layer-color-cluster');
+    ctl.css('background-color', lyr.style.color);
+    if (lyr.renderType == Layer.RENDER.HEATMAP) {
+        ctl.addClass('btn-layer-color-heatmap');
+    }
+    if (lyr.renderType == Layer.RENDER.CLUSTER) {
+        ctl.addClass('btn-layer-color-cluster');
+    }
+}
+
 //================================
 var LAYER_NAME_PREF = 'lyr-name-' ;
 
@@ -382,16 +395,7 @@ function uiLayerCreate(lyr, isVT) {
         var isVisible = $(this).is(':checked');
         lyr.setVisible(isVisible);
     } )
-    /*
-    $toolUp.click(function() {
-        self.removeLayer(lyr, -1);
-        var $prev = $div.prev();
-        if (! $prev.length) return;
-        $div.detach();
-        $prev.before($div);
-        //$tools.hide();
-    });
-    */
+
     $toolRemove.click(function() {
         lyr.remove();
         $div.remove();
@@ -406,11 +410,7 @@ function uiLayerCreate(lyr, isVT) {
     function doInfo() {
         uiLayerInfo(lyr);
     }
-    /*
-    $toolColor.change(function() {
-        lyr.setColor( $toolColor.val() );
-    });
-    */
+
 }
 
 function uiLayerError(layer, isError) {

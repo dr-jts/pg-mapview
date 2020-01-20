@@ -13,7 +13,7 @@ class Layer {  // abstract
             isLabelled: false,
             labelProp: ''
         };
-        this.renderType = Layer.RENDER.NORMAL;
+        this.renderType = Layer.RENDER.PLAIN;
         this.options = options;
 
         // init by subclasses
@@ -59,13 +59,13 @@ class Layer {  // abstract
         this.olmap().removeLayer(this.olLayer);
     }
 
-    setRender(renderType = Layer.RENDER.NORMAL) {
+    setRender(renderType = Layer.RENDER.PLAIN) {
         // do not change if not needed
         if (this.renderType == renderType) return;
         let src = this._baseSource();
         let ollyrNew = null;
         switch (renderType) {
-        case Layer.RENDER.NORMAL:
+        case Layer.RENDER.PLAIN:
                 ollyrNew = this._createBasicLayer(src, false);
                 break;
         case Layer.RENDER.DECLUTTER:
@@ -141,7 +141,7 @@ class Layer {  // abstract
 // used for UI layer ID
 Layer.idCounter = 0;
 Layer.RENDER = {
-    NORMAL: 1,
+    PLAIN: 1,
     DECLUTTER: 2,
     CLUSTER: 3,
     HEATMAP: 4
