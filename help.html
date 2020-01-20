@@ -20,7 +20,8 @@ This document describes how to use the capabilities of <a href='index.html'>PG-M
 obtained from servers implementing the
 <a target='new' href='http://docs.opengeospatial.org/is/17-069r3/17-069r3.html'>OGC API for Features</a>.
 </p>
-<h3>Add a OGC API for Features Layer</h3>
+<h3>Adding Layers</h3>
+<h4>Add a OGC API for Features Layer</h4>
 <p>
     <ul>
         <li>Click <button>Add...</button>.</li>
@@ -50,7 +51,20 @@ obtained from servers implementing the
             or <button>Cancel</button> to abort.</li>
     </ul>
 </p>
-<h3>Add a Vector Tile Layer</h3>
+<h4>Add a GeoJSON Dataset Layer</h4>
+<p>
+    <ul>
+        <li>Click <button>Add...</button>.</li>
+        <li>Click <input type='radio'> <b>Dataset</b>.</li>
+        <li>Enter the following information to specify the layer:
+            <ul>
+                <li><b>URL</b> - the URL of the Vector Tile service</li>
+            </ul>
+        </li>
+        <li>Click <button>Add</button> to create the layer,
+            or <button>Cancel</button> to abort.</li>
+    </ul>
+</p><h4>Add a Vector Tile Layer</h4>
 <p>
     <ul>
         <li>Click <button>Add...</button>.</li>
@@ -58,8 +72,7 @@ obtained from servers implementing the
         <li>Enter the following information to specify the layer:
             <ul>
                 <li><b>URL</b> - the URL of the Vector Tile service</li>
-                <li><b>Name</b> - the name of the layer to display.
-                </li>
+                <li><b>Name</b> - the name of the tile layer to display.</li>
             </ul>
         </li>
         <li>Click <button>Add</button> to create the layer,
@@ -69,18 +82,27 @@ obtained from servers implementing the
 <h3>Working with Layers</h3>
 <ul>
     <li>Click the checkbox to turn the layer on or off</li>
-    <li>Click the color button to change the color of the layer</li>
+    <li>Click the color swatch button to set the layer styling:
+        <ul>
+        <li>The title of the layer</li>
+        <li>The color of the layer</li>
+        <li>Whether the layer features are labelled and the feature property to use for the labels</li>
+        <li>A <b>Display Effect</b> to use: decluttered, clustered, or heatmap</li>
+        </ul>
+    </li>
     <li>Click the layer name to show the <b>Layer Control panel</b>
 
     </li>
 </ul>
-<h3>Layer Control panel</h3>
+<h4>Layer Control panel</h4>
 <ul>
     <li><span class='layer-tool'>X</span> - deletes the layer from the map</li>
+    <li><span class='layer-tool'>^</span> - moves the layer up in display order</li>
+    <li><span class='layer-tool'>v</span> - moves the layer down in display order</li>
     <li><span class='layer-tool'>i</span> - shows the layer info box</li>
     <li><span class='layer-tool'>Z</span> - zooms to the layer extent</li>
     <li><span class='layer-tool'>R</span> - requeries the layer.
-    Shift-click uses the current map extent.</li>
+        <span class='layer-tool'>Shift-click</span> requeries using the map extent</li>
     <li><span class='layer-tool'>S</span> - change the layer settings</li>
 </ul>
     </body>
