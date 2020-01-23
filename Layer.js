@@ -247,7 +247,7 @@ class LayerVT extends Layer {
         let src = new ol.source.VectorTile({
             format: new ol.format.MVT(),
             url: urlTile,
-            minZoom: 5,
+            minZoom: 1,
             maxZoom: 16
         })
         let ollyr = this._createBasicLayer(src);
@@ -259,7 +259,7 @@ class LayerVT extends Layer {
             className: "dataLayer", // needed to avoid base labels disappearing?
             style: this._createStyleFunction(),
             declutter: isDeclutter,
-            minZoom: 5,
+            minZoom: 1,
             source: src
         });
         return olLayer;
