@@ -143,11 +143,15 @@ function createStyleFunction(clr, lblName) {
 	return function(feature) {
 		let ftype = feature.getGeometry().getType();
 		let sty = styles[ftype];
+
+		let styleLabelText = feature.get('style_label_text');
 		if (lblName) {
 			let val = feature.get(lblName);
-			let txt = "" + val;
+			styleLabelText = "" + val;
+		}
+		if (styleLabelText) {
 			let textSpec = {
-				text: txt,
+				text: styleLabelText,
 				font: '14px sans-serif',
 				fill: new ol.style.Fill({ color: clr }),
 			};
@@ -155,6 +159,32 @@ function createStyleFunction(clr, lblName) {
 			if (ftype == 'Point') {
 				textSpec.offsetY = -14;	}
 			sty.setText( new ol.style.Text(textSpec) );
+		}
+		//--- set fill from feature styleFill property, if any
+		let styleFillColor = feature.get('style_fill_color');
+		//styleFill = "#ff0000";
+		if (styleFillColor) {
+			sty.setFill(new ol.style.Fill({ color: styleFillColor } ));
+		}
+		let strokeClr = sty.getStroke().getColor();
+		let styleStrokeColor = feature.get('style_stroke_color');
+		if (styleStrokeColor) {
+			strokeClr = styleStrokeColor;
+		}
+		let strokeW = sty.getStroke().getWidth();
+		let styleStrokeWidth = feature.get('style_stroke_width');
+		if (styleStrokeWidth == 0) {
+			strokeW = styleStrokeWidth;
+		}
+		if (styleStrokeWidth) {
+			strokeW = styleStrokeWidth
+			// OL bug?  need width to be > 0...
+		}
+		if (! strokeW || strokeW <= 0) strokeW = 0.00001;
+		//styleStrokeWidth = 0.00001;
+
+		if (strokeClr || strokeW >= 0) {
+			sty.setStroke(new ol.style.Stroke( { color: strokeClr, width: strokeW } ));
 		}
 		return sty;
 	}
